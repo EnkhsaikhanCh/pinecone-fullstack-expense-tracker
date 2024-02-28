@@ -1,0 +1,10 @@
+CREATE TABLE users (
+  user_id SERIAL PRIMARY KEY,
+  email VARCHAR(50) UNIQUE NOT NULL,
+  name VARCHAR(50) UNIQUE NOT NULL,
+  password TEXT,
+  avatar_img TEXT, 
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  currency_type TEXT DEFAULT 'MNT'
+)
