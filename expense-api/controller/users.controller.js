@@ -1,19 +1,4 @@
-const postgres = require("postgres");
-require("dotenv").config();
-
-let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
-
-const sql = postgres({
-  host: PGHOST,
-  database: PGDATABASE,
-  username: PGUSER,
-  password: PGPASSWORD,
-  port: 5432,
-  ssl: "require",
-  connection: {
-    options: `project=${ENDPOINT_ID}`,
-  },
-});
+const { sql } = require("../config/database");
 
 // Create ---------------------------------------------
 const createUser = async (req, res) => {
@@ -25,6 +10,24 @@ const createUser = async (req, res) => {
   res.json(response);
 };
 
+// Read ---------------------------------------------
+const getUser = async (req, res) => {
+  const result = await sql`select * from users`;
+  res.json(result);
+};
+
+// Update ---------------------------------------------
+const updateUser = async (req, res) => {
+  const { id } = req.params;
+  const { name, email, password, avatar_img } = req.body;
+
+  const result =
+    await sql`UPDATE tasks SET users = ${name}, ${email}, ${password}, ${avatar_img} WHERE id = ${id}`;
+  res.json(result);
+};
+
 module.exports = {
   createUser,
+  getUser,
+  updateUser,
 };
