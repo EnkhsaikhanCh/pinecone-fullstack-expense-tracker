@@ -1,55 +1,33 @@
 import axios from "axios";
-
 import { GrHomeRounded } from "react-icons/gr";
 import { Header } from "./Header";
 import { AddRecordButton } from "./AddRecordButton";
 import { useEffect, useState } from "react";
 
 const API_BASE_URL = `http://localhost:3000/transactions`;
-// const CREATE_ENDPOINT = `create`;
-// const UPDATE_ENDPOINT = `update`;
-// const DELETE_ENDPOINT = `delete`;
 
 export function Card() {
   const [transactions, setTransactions] = useState([]);
 
-  function loadTasks() {
-    axios.get(`${API_BASE_URL}`).then(
-      (response) => {
-        setTransactions(response.data);
-      },
-      (error) => {
-        console.error("Error loading task:", error.message);
-      },
-    );
+  // Function to load transactions from the server
+  async function loadTransactions() {
+    try {
+      const response = await axios.get(API_BASE_URL);
+      setTransactions(response.data);
+    } catch (error) {
+      console.error("Error loading transactions", error.message);
+    }
   }
 
   // Read ---------------------------------------------
   useEffect(() => {
-    loadTasks();
+    loadTransactions();
   }, []);
-
-  // Create ---------------------------------------------
-  function createTransaction() {
-    const title = document.getElementById("title");
-    const amount = document.getElementById("amount");
-    const description = document.getElementById("description");
-
-    if ((title, amount, description)) {
-      axios
-        .post(`${API_BASE_URL}/${CREATE_ENDPOINT}`, {
-          title,
-        })
-        .then(() => {
-          loadTasks();
-        });
-    }
-  }
 
   return (
     <>
       <Header />
-      <div className="container mx-auto mt-4 flex w-[1000px] flex-row justify-between gap-3">
+      <div className="container mx-auto mt-4 flex flex-row justify-between gap-3">
         <div>
           <FilterSection />
         </div>
