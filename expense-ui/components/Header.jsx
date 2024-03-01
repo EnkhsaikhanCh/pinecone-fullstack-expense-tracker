@@ -1,6 +1,3 @@
-import Link from "next/link";
-import { AddRecordButton } from "./AddRecordButton";
-
 export function Header() {
   return (
     <div className="container mx-auto">

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { IoAddOutline } from "react-icons/io5";
 
 const API_BASE_URL = `http://localhost:3000/transactions`;
