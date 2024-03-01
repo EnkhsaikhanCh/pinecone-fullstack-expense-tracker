@@ -74,14 +74,3 @@ export function Card() {
     </>
   );
 }
-
-// function DeleteTransactionButton({ deleteTransaction, transaction }) {
-//   return (
-//     <button
-//       className="btn h-[48px] w-[48px] px-[10px]"
-//       onClick={() => deleteTransaction(transaction.transaction_id)}
-//     >
-//       <PiTrashDuotone className="h-[20px] w-[20px]" />
-//     </button>
-//   );
-// }
