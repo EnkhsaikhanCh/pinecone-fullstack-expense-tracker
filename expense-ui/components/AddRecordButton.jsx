@@ -5,61 +5,26 @@ import { IoAddOutline } from "react-icons/io5";
 const API_BASE_URL = `http://localhost:3000/transactions`;
 const CREATE_ENDPOINT = `create`;
 
-export function AddRecordButton() {
-  const [transactions, setTransactions] = useState([]);
-  const [formData, setFormData] = useState({
-    title: "",
-    amount: "",
-    description: "",
-  });
+export function AddRecordButton({ onComplete }) {
+  const [title, setTitle] = useState("");
+  const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState("");
 
-  // Function to load transactions from the server
-  async function loadTransactions() {
-    try {
-      const response = await axios.get(API_BASE_URL);
-      setTransactions(response.data);
-    } catch (error) {
-      console.error("Error loading transactions:", error.message);
-    }
-  }
-
-  async function createTransaction() {
-    try {
-      const { title, amount, description } = formData;
-      if (title && amount && description) {
-        await axios.post(`${API_BASE_URL}/${CREATE_ENDPOINT}`, {
-          title,
-          amount,
-          description,
-        });
-
-        // Clear form data after successful submission
-        setFormData({
-          title: "",
-          amount: "",
-          description: "",
-        });
-
+  function createTransaction() {
+    axios
+      .post(`${API_BASE_URL}/${CREATE_ENDPOINT}`, {
+        title: title,
+        amount: amount,
+        description: description,
+      })
+      .then(() => {
         closeModal();
-        loadTransactions();
-      } else {
-        console.error("Invalid input values. Please check your inputs.");
-      }
-    } catch (error) {
-      console.error("Error creating transaction:", error.message);
-    }
+        onComplete();
+        setTitle("");
+        setAmount("");
+        setDescription("");
+      });
   }
-
-  useEffect(() => {
-    loadTransactions();
-  }, []);
-
-  const handleInputChange = (input) => {
-    setFormData({
-      ...formData,
-      [input.target.id]: input.target.value,
-    });
-  };
 
   const openModal = () => {
     document.getElementById("my_modal_1").showModal();
@@ -77,27 +42,40 @@ export function AddRecordButton() {
       </button>
       <dialog id="my_modal_1" className="modal">
         <div className="modal-box">
-          <h3 className="text-lg font-bold">Hello!</h3>
-          <p className="py-4">
-            Press ESC key or click the button below to close
-          </p>
+          <h2 className="mb-3 text-xl font-bold">Add Record</h2>
           <div className="flex flex-col gap-2">
-            <input
-              type="text"
-              placeholder="Title"
-              id="title"
-              className="input input-bordered w-full max-w-xs"
-              value={formData.title}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              placeholder="Amount"
-              id="amount"
-              className="input input-bordered w-full max-w-xs"
-              value={formData.amount}
-              onChange={handleInputChange}
-            />
+            {/* Category */}
+            <label className="form-control w-full max-w-xs">
+              <div className="label">
+                <span className="label-text">Category</span>
+              </div>
+              <select
+                className="select select-bordered"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              >
+                <option value="">...</option>
+                <option>Food & Drinks</option>
+                <option>Lending & Renting</option>
+                <option>Shopping</option>
+                <option>Invest</option>
+                <option>Other</option>
+              </select>
+            </label>
+
+            {/* Amount */}
+            <label className="input input-bordered flex w-full max-w-xs items-center gap-2">
+              Amount
+              <input
+                type="number"
+                className="grow"
+                placeholder="₮ 000.00"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+              />
+            </label>
+
+            {/* Description */}
             <label className="form-control">
               <div className="label">
                 <span className="label-text">Note</span>
@@ -106,8 +84,8 @@ export function AddRecordButton() {
                 className="textarea textarea-bordered h-24"
                 id="description"
                 placeholder="Write here"
-                value={formData.description}
-                onChange={handleInputChange}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               ></textarea>
             </label>
           </div>
