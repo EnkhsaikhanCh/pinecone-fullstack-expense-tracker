@@ -2,16 +2,17 @@ const { sql } = require("../config/database");
 
 // Create ---------------------------------------------
 const createTransaction = async (req, res) => {
-  const { title, amount, description } = req.body;
+  const { amount, category_id } = req.body;
   const response =
-    await sql`insert into transactions(title, amount, description) values(${title}, ${amount}, ${description})`;
+    await sql`INSERT INTO transactions(amount, category_id) values(${amount}, ${category_id})`;
 
   res.json(response);
 };
 
 // Read ---------------------------------------------
 const getTransaction = async (req, res) => {
-  const result = await sql`select * from transactions`;
+  const result =
+    await sql`SELECT transactions.id, amount, category_id, categories.name category_name FROM transactions LEFT JOIN categories ON transactions.category_id = categories.id;`;
   res.json(result);
 };
 
@@ -28,8 +29,7 @@ const updateTransaction = async (req, res) => {
 // Delete ---------------------------------------------
 const deleteTransaction = async (req, res) => {
   const { id } = req.params;
-  const result =
-    await sql`delete from transactions where transaction_id = ${id}`;
+  const result = await sql`delete from transactions where id = ${id}`;
   res.json(result);
 };
 

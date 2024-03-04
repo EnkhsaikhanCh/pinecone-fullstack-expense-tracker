@@ -6,23 +6,24 @@ const API_BASE_URL = `http://localhost:3000/transactions`;
 const CREATE_ENDPOINT = `create`;
 
 export function AddRecordButton({ onComplete }) {
-  const [title, setTitle] = useState("");
+  // const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
-  const [description, setDescription] = useState("");
+  const [category_id, setCategory_id] = useState("");
+  // const [description, setDescription] = useState("");
 
   function createTransaction() {
     axios
       .post(`${API_BASE_URL}/${CREATE_ENDPOINT}`, {
-        title: title,
+        title: category_id,
         amount: amount,
-        description: description,
+        // description: description,
       })
       .then(() => {
         closeModal();
         onComplete();
-        setTitle("");
         setAmount("");
-        setDescription("");
+        setCategory_id("");
+        // setDescription("");
       });
   }
 
@@ -51,8 +52,8 @@ export function AddRecordButton({ onComplete }) {
               </div>
               <select
                 className="select select-bordered"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                value={category_id}
+                onChange={(e) => setCategory_id(e.target.value)}
               >
                 <option value="">...</option>
                 <option>Food & Drinks</option>
@@ -76,7 +77,7 @@ export function AddRecordButton({ onComplete }) {
             </label>
 
             {/* Description */}
-            <label className="form-control">
+            {/* <label className="form-control">
               <div className="label">
                 <span className="label-text">Note</span>
               </div>
@@ -87,7 +88,7 @@ export function AddRecordButton({ onComplete }) {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               ></textarea>
-            </label>
+            </label> */}
           </div>
           <div className="modal-action">
             <form method="dialog" className="flex gap-2">

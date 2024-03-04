@@ -54,7 +54,7 @@ export function Card() {
                   <GrHomeRounded />
                 </div>
                 <div>
-                  <h1 className="text-lg">{transaction.title}</h1>
+                  <h1 className="text-lg">{transaction.category_name}</h1>
                   <p className="text-sm">{transaction.description}</p>
                 </div>
               </div>
@@ -62,7 +62,7 @@ export function Card() {
                 <p>{transaction.amount}</p>
                 <button
                   className="btn h-[48px] w-[48px] px-[10px]"
-                  onClick={() => deleteTransaction(transaction.transaction_id)}
+                  onClick={() => deleteTransaction(transaction.id)}
                 >
                   <PiTrashDuotone className="h-[20px] w-[20px]" />
                 </button>
