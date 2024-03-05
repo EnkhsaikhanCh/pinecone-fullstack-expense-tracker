@@ -1,10 +1,11 @@
 const { sql } = require("../config/database");
+const { v4: uuidv4 } = require("uuid");
 
 // Create ---------------------------------------------
 const createTransaction = async (req, res) => {
   const { amount, category_id } = req.body;
   const response =
-    await sql`INSERT INTO transactions(amount, category_id) values(${amount}, ${category_id})`;
+    await sql`INSERT INTO transactions(id, amount, category_id) values(${uuidv4()}, ${amount}, ${category_id})`;
 
   res.json(response);
 };
