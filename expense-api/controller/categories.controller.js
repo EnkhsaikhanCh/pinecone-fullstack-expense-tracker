@@ -9,6 +9,7 @@ const createCategory = async (req, res) => {
   res.json(response);
 };
 
+// Read ---------------------------------------------
 const getCategory = async (req, res) => {
   const result = await sql`SELECT * FROM categories`;
   res.json(result);

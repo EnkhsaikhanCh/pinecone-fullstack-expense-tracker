@@ -9,29 +9,16 @@ CREATE TABLE users (
   currency_type TEXT DEFAULT 'MNT'
 )
 
--- CREATE TABLE categories (
---     id VARCHAR(21) PRIMARY KEY,
---     name VARCHAR(55)
--- )
-
 CREATE TABLE categories (
-    id SERIAL PRIMARY KEY,
+    id VARCHAR(21) PRIMARY KEY,
     name VARCHAR(55)
 )
 
--- CREATE TABLE transactions (
---     id VARCHAR(21) PRIMARY KEY,
---     amount MONEY,
---     date TIMESTAMP,
---     category_id VARCHAR(21),
---     CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES categories (id)
--- )
-
 CREATE TABLE transactions (
-    id SERIAL PRIMARY KEY,
+    id VARCHAR(21) PRIMARY KEY,
     amount MONEY,
     date TIMESTAMP,
-    category_id SERIAL,
+    category_id VARCHAR(21),
     CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES categories (id)
 )
 
@@ -44,9 +31,6 @@ INSERT INTO categories VALUES('3', 'Shopping');
 INSERT INTO transactions(id, amount, category_id) VALUES('12', 10000, '1');
 INSERT INTO transactions(id, amount, category_id) VALUES('14', 23000, '2');
 INSERT INTO transactions(id, amount, category_id) VALUES('18', -5000, '3');
--- After change
-INSERT INTO transactions(amount, category_id) VALUES(15000, '3');
-
 
 -- 
 SELECT transactions.id, amount, category_id, categories.name category_name FROM transactions LEFT JOIN categories on transactions.category_id = categories.id;

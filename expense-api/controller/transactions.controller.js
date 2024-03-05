@@ -22,7 +22,7 @@ const updateTransaction = async (req, res) => {
   const { title, amount, description } = req.body;
 
   const result =
-    await sql`UPDATE transactions SET title = ${title}, amount = ${amount}, description = ${description} WHERE transaction_id = ${id}`;
+    await sql`UPDATE transactions SET title = ${title}, amount = ${amount}, description = ${description} WHERE id = ${id}`;
   res.json(result);
 };
 
