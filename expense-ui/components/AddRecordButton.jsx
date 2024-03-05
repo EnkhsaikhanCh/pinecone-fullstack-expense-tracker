@@ -1,29 +1,32 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoAddOutline } from "react-icons/io5";
+import { CategorySelect } from "./CategorySelect";
 
 const API_BASE_URL = `http://localhost:3000/transactions`;
 const CREATE_ENDPOINT = `create`;
 
 export function AddRecordButton({ onComplete }) {
   // const [title, setTitle] = useState("");
+  // const [amount, setAmount] = useState("");
+  const [id, setId] = useState("");
   const [amount, setAmount] = useState("");
   const [category_id, setCategory_id] = useState("");
-  // const [description, setDescription] = useState("");
 
   function createTransaction() {
+    // INSERT INTO transactions(id, amount, category_id) VALUES('12', 10000, '1');
     axios
       .post(`${API_BASE_URL}/${CREATE_ENDPOINT}`, {
-        title: category_id,
+        id: id,
         amount: amount,
-        // description: description,
+        category_id: category_id,
       })
       .then(() => {
         closeModal();
         onComplete();
+        setId("");
         setAmount("");
         setCategory_id("");
-        // setDescription("");
       });
   }
 
@@ -44,25 +47,9 @@ export function AddRecordButton({ onComplete }) {
       <dialog id="my_modal_1" className="modal">
         <div className="modal-box">
           <h2 className="mb-3 text-xl font-bold">Add Record</h2>
+
           <div className="flex flex-col gap-2">
-            {/* Category */}
-            <label className="form-control w-full max-w-xs">
-              <div className="label">
-                <span className="label-text">Category</span>
-              </div>
-              <select
-                className="select select-bordered"
-                value={category_id}
-                onChange={(e) => setCategory_id(e.target.value)}
-              >
-                <option value="">...</option>
-                <option>Food & Drinks</option>
-                <option>Lending & Renting</option>
-                <option>Shopping</option>
-                <option>Invest</option>
-                <option>Other</option>
-              </select>
-            </label>
+            <CategorySelect />
 
             {/* Amount */}
             <label className="input input-bordered flex w-full max-w-xs items-center gap-2">
@@ -75,33 +62,30 @@ export function AddRecordButton({ onComplete }) {
                 onChange={(e) => setAmount(e.target.value)}
               />
             </label>
+          </div>
 
-            {/* Description */}
-            {/* <label className="form-control">
-              <div className="label">
-                <span className="label-text">Note</span>
-              </div>
-              <textarea
-                className="textarea textarea-bordered h-24"
-                id="description"
-                placeholder="Write here"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              ></textarea>
-            </label> */}
-          </div>
-          <div className="modal-action">
-            <form method="dialog" className="flex gap-2">
-              <button className="btn" onClick={createTransaction}>
-                Done
-              </button>
-              <button className="btn" onClick={closeModal}>
-                Close
-              </button>
-            </form>
-          </div>
+          {/* Buttons */}
+          <ModalButtons
+            createTransaction={createTransaction}
+            closeModal={closeModal}
+          />
         </div>
       </dialog>
+    </div>
+  );
+}
+
+function ModalButtons({ createTransaction, closeModal }) {
+  return (
+    <div className="modal-action">
+      <form method="dialog" className="flex gap-2">
+        <button className="btn" onClick={createTransaction}>
+          Done
+        </button>
+        <button className="btn" onClick={closeModal}>
+          Close
+        </button>
+      </form>
     </div>
   );
 }
