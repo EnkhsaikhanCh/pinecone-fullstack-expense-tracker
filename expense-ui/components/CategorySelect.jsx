@@ -1,24 +1,38 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import Select from "react-select";
 
-const options = categories.map((category) => {
-  return {
-    value: category.id,
-    label: category.name,
-  };
-});
+export function CategorySelect({ onSelectChange }) {
+  const [categories, setCategories] = useState([]);
+  const [selected, setSelected] = useState();
 
-export function CategorySelect() {
-  const [categories, setCategories] = useState();
+  console.log(selected);
 
-  useEffect(async () => {
-    try {
-      const response = await axios.get(`http://localhost:3000/categories`);
+  function loadCategories() {
+    axios.get(`http://localhost:3000/categories`).then((response) => {
       setCategories(response.data);
-    } catch (error) {
-      console.error("Error loading transactions", error.message);
-    }
+    });
+  }
+
+  const options = categories.map((category) => {
+    return {
+      value: category.id,
+      label: category.name,
+    };
+  });
+
+  useEffect(() => {
+    loadCategories();
   }, []);
 
-  return <Select options={options} />;
+  return (
+    <Select
+      options={options}
+      className="text-black"
+      onChange={(val) => {
+        setSelected(val);
+        onSelectChange(val.value);
+      }}
+    />
+  );
 }

@@ -7,24 +7,18 @@ const API_BASE_URL = `http://localhost:3000/transactions`;
 const CREATE_ENDPOINT = `create`;
 
 export function AddRecordButton({ onComplete }) {
-  // const [title, setTitle] = useState("");
-  // const [amount, setAmount] = useState("");
-  const [id, setId] = useState("");
   const [amount, setAmount] = useState("");
   const [category_id, setCategory_id] = useState("");
 
   function createTransaction() {
-    // INSERT INTO transactions(id, amount, category_id) VALUES('12', 10000, '1');
     axios
       .post(`${API_BASE_URL}/${CREATE_ENDPOINT}`, {
-        id: id,
-        amount: amount,
         category_id: category_id,
+        amount: amount,
       })
       .then(() => {
         closeModal();
         onComplete();
-        setId("");
         setAmount("");
         setCategory_id("");
       });
@@ -49,7 +43,7 @@ export function AddRecordButton({ onComplete }) {
           <h2 className="mb-3 text-xl font-bold">Add Record</h2>
 
           <div className="flex flex-col gap-2">
-            <CategorySelect />
+            <CategorySelect onSelectChange={(catId) => setCategory_id(catId)} />
 
             {/* Amount */}
             <label className="input input-bordered flex w-full max-w-xs items-center gap-2">
