@@ -4,6 +4,7 @@ import { Header } from "./Header";
 import { AddRecordButton } from "./AddRecordButton";
 import { useEffect, useState } from "react";
 import { PiTrashDuotone } from "react-icons/pi";
+import dayjs from "dayjs";
 
 const API_BASE_URL = `http://localhost:3000/transactions`;
 const DELETE_ENDPOINT = `delete`;
@@ -35,19 +36,18 @@ export function Card() {
         });
     }
   }
-
   return (
     <>
       <Header />
-      <div className="container mx-auto mt-4 flex flex-row justify-between gap-3 lg:w-[1000px]">
-        <div className="card h-full w-[300px] rounded-md bg-neutral px-4 py-2">
+      <div className="container mx-auto mt-4 flex flex-col justify-between gap-3 px-4 md:flex-row lg:w-[1000px]">
+        <div className="card h-full w-[full] rounded-md bg-white px-4 py-2 md:w-[300px]">
           <AddRecordButton onComplete={loadTransactions} />
         </div>
         <div className="card flex w-full gap-2 ">
           {transactions.map((transaction) => (
             <div
               key={transaction.transaction_id}
-              className="flex justify-between rounded-md bg-neutral py-4 pr-4"
+              className="flex justify-between rounded-md bg-white py-4 pr-4"
             >
               <div className="flex">
                 <div className="flex w-14 items-center justify-center">
@@ -55,7 +55,7 @@ export function Card() {
                 </div>
                 <div>
                   <h1 className="text-lg">{transaction.category_name}</h1>
-                  <p className="text-sm">{transaction.description}</p>
+                  <Date transaction={transaction} />
                 </div>
               </div>
               <div className="flex items-center gap-2 text-lg">
@@ -73,4 +73,10 @@ export function Card() {
       </div>
     </>
   );
+}
+
+function Date({ transaction }) {
+  const date = dayjs(transaction.date).format("HH:mm");
+  console.log(date);
+  return <p className="text-sm text-[#6B7280]">{date}</p>;
 }
