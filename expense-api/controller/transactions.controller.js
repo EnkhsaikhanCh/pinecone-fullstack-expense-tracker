@@ -3,9 +3,9 @@ const { v4: uuidv4 } = require("uuid");
 
 // Create ---------------------------------------------
 const createTransaction = async (req, res) => {
-  const { amount, category_id } = req.body;
+  const { amount, category_id, date } = req.body;
   const response =
-    await sql`INSERT INTO transactions(id, amount, category_id) values(${uuidv4()}, ${amount}, ${category_id})`;
+    await sql`INSERT INTO transactions(id, amount, category_id, date) values(${uuidv4()}, ${amount}, ${category_id}, ${date})`;
 
   res.json(response);
 };
@@ -13,7 +13,7 @@ const createTransaction = async (req, res) => {
 // Read ---------------------------------------------
 const getTransaction = async (req, res) => {
   const result =
-    await sql`SELECT transactions.id, amount, category_id, categories.name category_name FROM transactions LEFT JOIN categories ON transactions.category_id = categories.id;`;
+    await sql`SELECT transactions.id, amount, category_id, categories.name category_name, date FROM transactions LEFT JOIN categories on transactions.category_id = categories.id;`;
   res.json(result);
 };
 

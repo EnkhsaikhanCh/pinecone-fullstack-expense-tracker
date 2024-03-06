@@ -2,7 +2,7 @@ import { Logo } from "./image/Logo";
 
 export function Header() {
   return (
-    <div className="bg-[#1C212B]">
+    <div className="bg-white">
       <div className="container mx-auto">
         <div className="navbar">
           <div className="flex flex-1 gap-2">

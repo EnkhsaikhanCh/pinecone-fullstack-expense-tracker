@@ -6,8 +6,6 @@ export function CategorySelect({ onSelectChange }) {
   const [categories, setCategories] = useState([]);
   const [selected, setSelected] = useState();
 
-  console.log(selected);
-
   function loadCategories() {
     axios.get(`http://localhost:3000/categories`).then((response) => {
       setCategories(response.data);
@@ -26,13 +24,18 @@ export function CategorySelect({ onSelectChange }) {
   }, []);
 
   return (
-    <Select
-      options={options}
-      className="text-black"
-      onChange={(val) => {
-        setSelected(val);
-        onSelectChange(val.value);
-      }}
-    />
+    <label>
+      <div className="label">
+        <p className="label-text text-[#808080]">Category</p>
+      </div>
+      <Select
+        options={options}
+        className="text-black "
+        onChange={(val) => {
+          setSelected(val);
+          onSelectChange(val.value);
+        }}
+      />
+    </label>
   );
 }
