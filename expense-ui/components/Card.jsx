@@ -1,10 +1,10 @@
 import axios from "axios";
 import { GrHomeRounded } from "react-icons/gr";
 import { Header } from "./Header";
-import { AddRecordButton } from "./AddRecordButton";
 import { useEffect, useState } from "react";
 import { PiTrashDuotone } from "react-icons/pi";
 import dayjs from "dayjs";
+import { FilterSection } from "./FilterSection";
 
 const API_BASE_URL = `http://localhost:3000/transactions`;
 const DELETE_ENDPOINT = `delete`;
@@ -40,9 +40,7 @@ export function Card() {
     <>
       <Header />
       <div className="container mx-auto mt-4 flex flex-col justify-between gap-3 px-4 md:flex-row lg:w-[1000px]">
-        <div className="card h-full w-[full] rounded-md bg-white px-4 py-2 md:w-[300px]">
-          <AddRecordButton onComplete={loadTransactions} />
-        </div>
+        <FilterSection loadTransactions={loadTransactions} />
         <div className="card flex w-full gap-2 ">
           {transactions.map((transaction) => (
             <div
