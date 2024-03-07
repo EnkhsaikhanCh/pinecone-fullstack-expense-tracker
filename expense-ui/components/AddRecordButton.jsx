@@ -1,8 +1,8 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { IoAddOutline } from "react-icons/io5";
+import { useState } from "react";
 import { CategorySelect } from "./CategorySelect";
 import { PayeeSelect } from "./PayeeSelect";
+import { FaPlus } from "react-icons/fa6";
 
 const API_BASE_URL = `http://localhost:3000/transactions`;
 const CREATE_ENDPOINT = `create`;
@@ -11,6 +11,7 @@ export function AddRecordButton({ onComplete }) {
   const [amount, setAmount] = useState("");
   const [category_id, setCategory_id] = useState("");
   const [date, setDate] = useState("");
+  const [open, setOpen] = useState(false);
 
   function createTransaction() {
     axios
@@ -29,21 +30,24 @@ export function AddRecordButton({ onComplete }) {
   }
 
   const openModal = () => {
-    document.getElementById("my_modal_1").showModal();
+    setOpen(true);
   };
 
   const closeModal = () => {
-    document.getElementById("my_modal_1").close();
+    setOpen(false);
   };
 
   return (
     <div>
-      <button className="btn" onClick={openModal}>
-        <IoAddOutline />
+      <button
+        className="btn bg-[#0366FF] text-white md:btn-wide hover:bg-[#0346ff]"
+        onClick={openModal}
+      >
+        <FaPlus />
         Add record
       </button>
-      <dialog id="my_modal_1" className="modal">
-        <div className="modal-box w-11/12 max-w-2xl">
+      <dialog id="my_modal_1" className={`modal ${open ? "modal-open" : ""}`}>
+        <div className="modal-box w-11/12 max-w-2xl overflow-visible">
           {/* Header */}
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold">Add Record</h2>
@@ -76,6 +80,7 @@ export function AddRecordButton({ onComplete }) {
                 </label>
                 <CategorySelect
                   onSelectChange={(catId) => setCategory_id(catId)}
+                  open={open}
                 />
                 <div className="flex gap-1">
                   <label className="form-control w-full max-w-xs ">
@@ -123,7 +128,7 @@ function ModalButtons({ createTransaction }) {
     <div className="modal-action">
       <form method="dialog" className="flex gap-2">
         <button
-          className="btn btn-primary md:btn-wide"
+          className="btn bg-[#0366FF] text-white md:btn-wide hover:bg-[#0346ff]"
           onClick={createTransaction}
         >
           Add record

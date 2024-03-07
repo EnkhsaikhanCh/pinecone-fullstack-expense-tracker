@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Select from "react-select";
 
-export function CategorySelect({ onSelectChange }) {
+export function CategorySelect({ onSelectChange, open }) {
   const [categories, setCategories] = useState([]);
   const [selected, setSelected] = useState();
 
@@ -20,8 +20,14 @@ export function CategorySelect({ onSelectChange }) {
   });
 
   useEffect(() => {
-    loadCategories();
-  }, []);
+    if (open) {
+      loadCategories();
+    }
+  }, [open]);
+
+  const colorStyle = {
+    control: (styles) => ({ ...styles, backgroundColor: "#F3F4F6" }),
+  };
 
   return (
     <label>
@@ -30,7 +36,7 @@ export function CategorySelect({ onSelectChange }) {
       </div>
       <Select
         options={options}
-        className="text-black "
+        styles={colorStyle}
         onChange={(val) => {
           setSelected(val);
           onSelectChange(val.value);
