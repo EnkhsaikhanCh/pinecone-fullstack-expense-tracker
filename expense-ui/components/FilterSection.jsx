@@ -38,7 +38,7 @@ export function FilterSection({ loadTransactions }) {
   }, []);
 
   return (
-    <div className="card h-full w-[full] rounded-md bg-white px-4 py-2 md:w-[300px]">
+    <div className="card rounded-md bg-white px-4 py-2 md:w-[300px]">
       <AddRecordButton onComplete={loadTransactions} />
       <div className="mt-3 flex flex-col">
         <h1 className="font-bold">Category</h1>
@@ -49,7 +49,7 @@ export function FilterSection({ loadTransactions }) {
           >
             {category.name}
             <button
-              className="btn btn-ghost btn-sm"
+              className="btn btn-ghost btn-sm w-8 p-0"
               onClick={() => deleteCategory(category.id)}
             >
               <PiTrashDuotone />

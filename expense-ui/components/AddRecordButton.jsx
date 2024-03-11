@@ -40,7 +40,7 @@ export function AddRecordButton({ onComplete }) {
   return (
     <div>
       <button
-        className="btn bg-[#0366FF] text-white md:btn-wide hover:bg-[#0346ff]"
+        className="btn btn-neutral text-white md:btn-wide"
         onClick={openModal}
       >
         <FaPlus />
@@ -100,7 +100,7 @@ export function AddRecordButton({ onComplete }) {
             {/* part 2 */}
             <div>
               <PayeeSelect />
-              <label className="form-control w-full max-w-xs">
+              <label className="form-control w-full max-w-xs ">
                 <div className="label">
                   <span className="label-text text-[#808080]">Note</span>
                 </div>

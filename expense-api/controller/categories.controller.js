@@ -28,9 +28,3 @@ module.exports = {
   getCategory,
   deleteCategory,
 };
-
-// drop table transactions
-// create table transactions again
-
-// drop table categories
-// create table categories (change id logic)
