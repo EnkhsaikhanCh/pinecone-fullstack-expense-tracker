@@ -14,6 +14,27 @@ app.use("/users", usersRouter);
 app.use("/transactions", transactionsRouter);
 app.use("/categories", categoriesRouter);
 
+// Login
+const dbUsername = "email@gmail.com";
+const dbPass = "12345678";
+
+app.post("/login", (req, res) => {
+  const { email, pass } = req.body;
+
+  if (email !== dbUsername) {
+    res.sendStatus(401);
+    return;
+  }
+
+  if (pass !== dbPass) {
+    res.sendStatus(401);
+    return;
+  }
+
+  console.log({ email, pass });
+  res.json(["Success"]);
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
