@@ -3,31 +3,59 @@ import { useState } from "react";
 import { CategorySelect } from "./CategorySelect";
 import { PayeeSelect } from "./PayeeSelect";
 import { FaPlus } from "react-icons/fa6";
+import { IoClose } from "react-icons/io5";
 
 const API_BASE_URL = `http://localhost:3000/transactions`;
 const CREATE_ENDPOINT = `create`;
 
+const getCurrentDateTime = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = `${now.getMonth() + 1}`.padStart(2, "0");
+  const day = `${now.getDate()}`.padStart(2, "0");
+  const hours = `${now.getHours()}`.padStart(2, "0");
+  const minutes = `${now.getMinutes()}`.padStart(2, "0");
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+};
+
 export function AddRecordButton({ onComplete }) {
   const [amount, setAmount] = useState("");
   const [category_id, setCategory_id] = useState("");
-  const [date, setDate] = useState("");
+  const [dateTime, setDateTime] = useState(getCurrentDateTime());
   const [open, setOpen] = useState(false);
+  const [displayAmount, setDisplayAmount] = useState("");
 
   function createTransaction() {
     axios
       .post(`${API_BASE_URL}/${CREATE_ENDPOINT}`, {
         category_id: category_id,
         amount: amount,
-        date: date,
+        date: dateTime,
       })
       .then(() => {
         closeModal();
         onComplete();
-        setAmount("");
+        setDisplayAmount("");
         setCategory_id("");
-        setDate("");
+        setDateTime(getCurrentDateTime());
+      })
+      .catch((error) => {
+        console.error("Error creating transaction:", error);
       });
   }
+
+  const handleAmountChange = (e) => {
+    const numericValue = e.target.value.replace(/,/g, "");
+
+    if (numericValue && !isNaN(numericValue)) {
+      const formattedValue = parseFloat(numericValue).toLocaleString();
+      setAmount(numericValue);
+      setDisplayAmount(formattedValue);
+    } else {
+      setAmount("");
+      setDisplayAmount("");
+    }
+  };
 
   const openModal = () => {
     setOpen(true);
@@ -51,8 +79,8 @@ export function AddRecordButton({ onComplete }) {
           {/* Header */}
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold">Add Record</h2>
-            <button className="btn btn-sm" onClick={closeModal}>
-              ✕
+            <button className="btn btn-sm w-[30px] p-0" onClick={closeModal}>
+              <IoClose />
             </button>
           </div>
           <div className="divider"></div>
@@ -71,11 +99,11 @@ export function AddRecordButton({ onComplete }) {
                     <p className="text-sm text-[#808080]">Amount</p>
                   </div>
                   <input
-                    type="number"
+                    type="text"
                     className="grow"
                     placeholder="₮ 000.00"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
+                    value={displayAmount}
+                    onChange={handleAmountChange}
                   />
                 </label>
                 <CategorySelect
@@ -89,7 +117,7 @@ export function AddRecordButton({ onComplete }) {
                     </div>
                     <input
                       type="datetime-local"
-                      value={date}
+                      value={dateTime}
                       className="input input-bordered w-full max-w-xs bg-[#F3F4F6] text-[#808080]"
                       onChange={(e) => setDate(e.target.value)}
                     />
@@ -128,7 +156,7 @@ function ModalButtons({ createTransaction }) {
     <div className="modal-action">
       <form method="dialog" className="flex gap-2">
         <button
-          className="btn bg-[#0366FF] text-white md:btn-wide hover:bg-[#0346ff]"
+          className="btn btn-neutral text-white md:btn-wide"
           onClick={createTransaction}
         >
           Add record

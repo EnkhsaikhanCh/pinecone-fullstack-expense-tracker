@@ -5,21 +5,21 @@ import Select from "react-select";
 export function CategorySelect({ onSelectChange, open }) {
   const [categories, setCategories] = useState([]);
 
-  function loadCategories() {
-    axios.get(`http://localhost:3000/categories`).then((response) => {
-      setCategories(response.data);
-    });
-  }
-
-  const options = categories.map((category) => {
-    return {
-      value: category.id,
-      label: category.name,
-    };
-  });
-
   useEffect(() => {
     if (open) {
+      const loadCategories = () => {
+        axios
+          .get(`http://localhost:3000/categories`)
+          .then((response) => {
+            const categoryOptions = response.data.map((category) => ({
+              value: category.id,
+              label: category.name,
+            }));
+            setCategories(categoryOptions);
+          })
+          .catch((error) => console.error("Failed to load categories:", error));
+      };
+
       loadCategories();
     }
   }, [open]);
@@ -34,12 +34,13 @@ export function CategorySelect({ onSelectChange, open }) {
         <p className="label-text text-[#808080]">Category</p>
       </div>
       <Select
-        instanceId={"Category"}
-        options={options}
+        instanceId="CategorySelect"
+        options={categories}
         styles={colorStyle}
         onChange={(val) => {
           onSelectChange(val.value);
         }}
+        aria-activedescendant={open ? "your-activedescendant-id" : undefined}
       />
     </label>
   );

@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa6";
+import { IoClose } from "react-icons/io5";
 
 const API_BASE_URL = `http://localhost:3000/categories`;
 const CREATE_ENDPOINT = `create`;
@@ -38,8 +39,8 @@ export function AddCategoryButton({ onComplete }) {
         <div className="modal-box">
           <div className="mb-5 flex items-center justify-between">
             <h2 className="text-xl font-bold">Add Category</h2>
-            <button className="btn btn-sm" onClick={closeModal}>
-              ✕
+            <button className="btn btn-sm w-[30px] p-0" onClick={closeModal}>
+              <IoClose />
             </button>
           </div>
           {/* Name */}
@@ -57,7 +58,10 @@ export function AddCategoryButton({ onComplete }) {
           </label>
           <div className="modal-action">
             <form method="dialog" className="flex gap-2">
-              <button className="btn" onClick={createCategory}>
+              <button
+                className="btn btn-neutral text-white"
+                onClick={createCategory}
+              >
                 Add Category
               </button>
             </form>
