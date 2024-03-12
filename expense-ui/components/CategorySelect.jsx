@@ -4,7 +4,6 @@ import Select from "react-select";
 
 export function CategorySelect({ onSelectChange, open }) {
   const [categories, setCategories] = useState([]);
-  const [selected, setSelected] = useState();
 
   function loadCategories() {
     axios.get(`http://localhost:3000/categories`).then((response) => {
@@ -35,10 +34,10 @@ export function CategorySelect({ onSelectChange, open }) {
         <p className="label-text text-[#808080]">Category</p>
       </div>
       <Select
+        instanceId={"Category"}
         options={options}
         styles={colorStyle}
         onChange={(val) => {
-          setSelected(val);
           onSelectChange(val.value);
         }}
       />

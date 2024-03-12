@@ -44,7 +44,7 @@ export function Card() {
         <div className="card flex w-full gap-2 ">
           {transactions.map((transaction) => (
             <div
-              key={transaction.transaction_id}
+              key={transaction.id}
               className="flex justify-between rounded-md bg-white py-4 pr-4"
             >
               <div className="flex">

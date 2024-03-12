@@ -37,7 +37,7 @@ export function AddCategoryButton({ onComplete }) {
       <dialog id="my_modal_3" className="modal">
         <div className="modal-box">
           <div className="mb-5 flex items-center justify-between">
-            <h2 className="text-xl font-bold">Add Record</h2>
+            <h2 className="text-xl font-bold">Add Category</h2>
             <button className="btn btn-sm" onClick={closeModal}>
               ✕
             </button>

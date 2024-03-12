@@ -38,24 +38,26 @@ export function FilterSection({ loadTransactions }) {
   }, []);
 
   return (
-    <div className="card rounded-md bg-white px-4 py-2 md:w-[300px]">
-      <AddRecordButton onComplete={loadTransactions} />
-      <div className="mt-3 flex flex-col">
-        <h1 className="font-bold">Category</h1>
-        {categories.map((category) => (
-          <p
-            key={category.id}
-            className="mb-1 ml-2 flex items-center justify-between text-center"
-          >
-            {category.name}
-            <button
-              className="btn btn-ghost btn-sm w-8 p-0"
-              onClick={() => deleteCategory(category.id)}
+    <div className="card flex justify-between rounded-md bg-white px-4 py-2 md:w-[300px]">
+      <div>
+        <AddRecordButton onComplete={loadTransactions} />
+        <div className="mt-3 flex flex-col">
+          <h1 className="font-bold">Category</h1>
+          {categories.map((category) => (
+            <p
+              key={category.id}
+              className="mb-1 ml-2 flex items-center justify-between text-center"
             >
-              <PiTrashDuotone />
-            </button>
-          </p>
-        ))}
+              {category.name}
+              <button
+                className="btn btn-ghost btn-sm w-8 p-0"
+                onClick={() => deleteCategory(category.id)}
+              >
+                <PiTrashDuotone />
+              </button>
+            </p>
+          ))}
+        </div>
       </div>
       <AddCategoryButton onComplete={loadCategory} />
     </div>

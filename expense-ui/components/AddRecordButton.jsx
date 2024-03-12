@@ -90,7 +90,7 @@ export function AddRecordButton({ onComplete }) {
                     <input
                       type="datetime-local"
                       value={date}
-                      className="input input-bordered w-full max-w-xs bg-[#F3F4F6]"
+                      className="input input-bordered w-full max-w-xs bg-[#F3F4F6] text-[#808080]"
                       onChange={(e) => setDate(e.target.value)}
                     />
                   </label>
@@ -110,7 +110,7 @@ export function AddRecordButton({ onComplete }) {
                   cols="40"
                   rows="6"
                   placeholder="Write here"
-                  className="textarea textarea-bordered w-full resize-none rounded-md bg-[#F3F4F6] p-2"
+                  className="textarea textarea-bordered w-full resize-none rounded-md bg-[#F3F4F6] p-2 "
                 ></textarea>
               </label>
             </div>
