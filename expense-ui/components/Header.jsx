@@ -1,4 +1,4 @@
-import { Logo } from "./image/Logo";
+import { LogoSVG } from "./image/LogoSVG";
 
 export function Header() {
   return (
@@ -6,7 +6,7 @@ export function Header() {
       <div className="container mx-auto">
         <div className="navbar">
           <div className="flex flex-1 gap-2">
-            <Logo />
+            <LogoSVG />
             <a href="http://localhost:3001" className="btn btn-ghost text-lg">
               Dashboard
             </a>

@@ -1,27 +1,21 @@
-import { Logo } from "@/components/image/Logo";
+import { LogoSVG } from "@/components/image/LogoSVG";
 import { useState } from "react";
 import axios from "axios";
 
 export default function Home() {
   const [email, setEmail] = useState("");
-  const [pass, setPass] = useState("");
+  const [password, setPassword] = useState("");
 
   function handleClick() {
-    console.log({ email, pass });
+    console.log({ email, password });
     axios
       .post("http://localhost:3000/login", {
         email,
-        pass,
+        password,
       })
       .then(() => {
-        alert("Success");
-        localStorage.setItem("login", `${email}:${pass}`);
-        window.location = "/records";
-      })
-      .catch((e) => {
-        if (e.response.status === 401) {
-          alert("username or password is incorrect");
-        }
+        localStorage.setItem("login", `${email}:${password}`);
+        window.location = "/";
       });
   }
 
@@ -29,14 +23,13 @@ export default function Home() {
     <main>
       <div className="container mx-auto mt-10 flex w-[342px] flex-col items-center gap-3 px-4">
         <div className="flex items-center gap-2">
-          <Logo />
+          <LogoSVG />
           <h1 className="text-2xl font-bold">Gelt</h1>
         </div>
         <div className="mb-3 mt-5 flex h-full flex-col gap-2">
           <h1 className="flex justify-center text-xl font-bold">
             Welcome back
           </h1>
-          {/* <p className="text-sm">Welcome back, Please enter your details</p> */}
         </div>
         <div className="card w-full rounded-md border bg-white">
           <div className="card-body px-[20px] py-4">
@@ -66,15 +59,14 @@ export default function Home() {
                   type="password"
                   placeholder=""
                   className="input input-sm input-bordered w-full max-w-xs rounded-md bg-[#F5F5F5]"
-                  value={pass}
-                  onChange={(e) => setPass(e.target.value)}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </label>
             </div>
-
             {/* Login button */}
             <button
-              className="btn btn-neutral btn-sm rounded-md"
+              className="btn btn-neutral btn-sm rounded-md text-white"
               onClick={handleClick}
             >
               Log in
@@ -86,7 +78,9 @@ export default function Home() {
           <div className="card-body py-[20px]">
             <span className="flex justify-center gap-2">
               Don't have account?{" "}
-              <button className="text-[#2F81F7]">Sign up</button>
+              <a href="http://localhost:3001/signUp">
+                <button className="text-[#2F81F7]">Sign up</button>
+              </a>
             </span>
           </div>
         </div>
