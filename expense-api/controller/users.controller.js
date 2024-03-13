@@ -1,11 +1,12 @@
 const { sql } = require("../config/database");
+const { v4: uuidv4 } = require("uuid");
 
 // Create ---------------------------------------------
 const createUser = async (req, res) => {
-  const { name, email, password, avatar_img } = req.body;
+  const { name, email, password } = req.body;
 
   const response =
-    await sql`insert into users(name, email, password, avatar_img) values(${name}, ${email}, ${password}, ${avatar_img})`;
+    await sql`INSERT INTO users(id, name, email, password) VALUES(${uuidv4()}, ${name}, ${email}, ${password})`;
 
   res.json(response);
 };

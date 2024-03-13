@@ -1,5 +1,5 @@
 CREATE TABLE users (
-  user_id SERIAL PRIMARY KEY,
+  id VARCHAR(40) PRIMARY KEY,
   email VARCHAR(50) UNIQUE NOT NULL,
   name VARCHAR(50) UNIQUE NOT NULL,
   password TEXT,
@@ -10,15 +10,15 @@ CREATE TABLE users (
 )
 
 CREATE TABLE categories (
-    id VARCHAR(21) PRIMARY KEY,
+    id VARCHAR(40) PRIMARY KEY,
     name VARCHAR(55)
 )
 
 CREATE TABLE transactions (
-    id VARCHAR(21) PRIMARY KEY,
+    id VARCHAR(40) PRIMARY KEY,
     amount MONEY,
     date TIMESTAMP,
-    category_id VARCHAR(21),
+    category_id VARCHAR(40),
     CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES categories (id)
 )
 

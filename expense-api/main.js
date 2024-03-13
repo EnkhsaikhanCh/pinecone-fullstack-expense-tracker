@@ -3,6 +3,7 @@ const cors = require("cors");
 const usersRouter = require("./router/users.router");
 const transactionsRouter = require("./router/transactions.router");
 const categoriesRouter = require("./router/categories.router");
+const { sql } = require("./config/database");
 
 const app = express();
 const port = 3000;
@@ -14,25 +15,21 @@ app.use("/users", usersRouter);
 app.use("/transactions", transactionsRouter);
 app.use("/categories", categoriesRouter);
 
-// Login
-const dbUsername = "email@gmail.com";
-const dbPass = "12345678";
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  const users = await sql`SELECT * FROM users WHERE email=${email}`;
 
-app.post("/login", (req, res) => {
-  const { email, pass } = req.body;
+  const user = users[0];
 
-  if (email !== dbUsername) {
-    res.sendStatus(401);
-    return;
+  console.log({ user });
+
+  if (user.password === password) {
+    res.json(user);
+  } else {
+    res.status(500).json({ message: "email or password incorrect" });
   }
 
-  if (pass !== dbPass) {
-    res.sendStatus(401);
-    return;
-  }
-
-  console.log({ email, pass });
-  res.json(["Success"]);
+  console.log({ email, password });
 });
 
 app.listen(port, () => {
