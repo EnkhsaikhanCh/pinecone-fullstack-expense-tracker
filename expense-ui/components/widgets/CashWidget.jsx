@@ -3,7 +3,7 @@ import { ChipSVG } from "../image/ChipSVG";
 
 export function CashWidget() {
   return (
-    <div className="card h-[200px] w-[384px] bg-neutral text-white">
+    <div className="card h-[200px] w-[384px] bg-neutral text-white shadow-sm">
       <div className="card-body flex justify-between">
         <div className="flex gap-2">
           <LogoSVG />

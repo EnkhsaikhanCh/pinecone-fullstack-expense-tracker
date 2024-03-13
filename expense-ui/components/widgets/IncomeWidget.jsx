@@ -3,7 +3,7 @@ import { VectorSVG } from "../image/VectorSVG";
 
 export function IncomeWidget() {
   return (
-    <div className="card h-[200px] w-96 bg-white">
+    <div className="card h-[200px] w-96 bg-white shadow-sm">
       <div className="card-body flex justify-between px-0 pb-5 pt-4">
         <div className="flex items-center gap-2 border-b-[1px] px-8 pb-2">
           <DotSVG />
@@ -11,7 +11,7 @@ export function IncomeWidget() {
         </div>
         <div className="flex h-[120px] flex-col justify-between gap-4 px-8 pt-2">
           <div>
-            <span className="rounded-md bg-emerald-300 px-2 text-4xl font-semibold">
+            <span className="rounded-md bg-emerald-300 px-3 text-4xl font-semibold">
               1,200,000
             </span>
             <p className="mt-1 text-lg text-gray-400">Your Income Amount</p>
