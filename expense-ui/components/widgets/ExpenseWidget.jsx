@@ -11,7 +11,7 @@ export function ExpenseWidget() {
         </div>
         <div className="flex h-[120px] flex-col justify-between gap-4 px-8 pt-2">
           <div>
-            <span className="rounded-md bg-red-300 px-3 text-4xl font-semibold">
+            <span className="rounded-md border border-red-300 bg-rose-100 px-3 text-4xl font-semibold">
               -1,200,000
             </span>
             <p className="mt-1 text-lg text-gray-400">Your Expense Amount</p>

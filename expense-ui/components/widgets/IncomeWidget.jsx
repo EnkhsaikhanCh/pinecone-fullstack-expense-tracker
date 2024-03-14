@@ -11,7 +11,7 @@ export function IncomeWidget() {
         </div>
         <div className="flex h-[120px] flex-col justify-between gap-4 px-8 pt-2">
           <div>
-            <span className="rounded-md bg-emerald-300 px-3 text-4xl font-semibold">
+            <span className="rounded-md border border-emerald-300 bg-emerald-100 px-3 text-4xl font-semibold">
               1,200,000
             </span>
             <p className="mt-1 text-lg text-gray-400">Your Income Amount</p>
