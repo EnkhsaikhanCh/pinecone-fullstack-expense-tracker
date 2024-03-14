@@ -36,7 +36,7 @@ export function Card() {
   }
   return (
     <>
-      <div className="flex flex-col justify-between gap-3 px-4 md:flex-row lg:w-[1000px]">
+      <div className="flex w-full flex-col items-center justify-between gap-3 md:flex-row lg:w-[1000px]">
         {/* <FilterSection loadTransactions={loadTransactions} /> */}
         <div className="card flex w-full gap-2 ">
           {transactions.map((transaction) => (

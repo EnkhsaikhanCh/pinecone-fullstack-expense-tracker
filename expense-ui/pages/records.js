@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div>
       <Header />
-      <div className="container mx-auto mt-4 flex w-fit">
+      <div className="container mx-auto mt-4 flex flex-col justify-between gap-2 px-4 md:flex-row lg:w-[1000px]">
         <FilterSection />
         <Card />
       </div>

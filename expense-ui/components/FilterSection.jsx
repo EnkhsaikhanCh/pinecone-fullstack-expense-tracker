@@ -38,7 +38,7 @@ export function FilterSection({ loadTransactions }) {
   }, []);
 
   return (
-    <div className="card flex justify-between rounded-md bg-white px-4 py-2 md:w-[300px]">
+    <div className="card flex justify-between rounded-md bg-white px-4 py-2">
       <div>
         <AddRecordButton onComplete={loadTransactions} />
         <div className="mt-3 flex flex-col">
