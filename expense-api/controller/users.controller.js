@@ -1,20 +1,52 @@
 const { sql } = require("../config/database");
 const { v4: uuidv4 } = require("uuid");
+const bcrypt = require("bcryptjs");
 
 // Create ---------------------------------------------
 const createUser = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { username, email, password } = req.body;
 
-  const response =
-    await sql`INSERT INTO users(id, name, email, password) VALUES(${uuidv4()}, ${name}, ${email}, ${password})`;
+  // 1. Check duplicate username
+  const users = await sql`SELECT * FROM users WHERE username=${username}`;
+  if (users.length > 0) {
+    res.status(200).json({ message: "Already registered." });
+    return;
+  }
 
-  res.json(response);
+  // 2. password validation
+  if (users.password < 8) {
+    res.status(200).json({ message: "Password must be at least 8 characters" });
+    return;
+  }
+
+  // 3. register user
+  const hash = bcrypt.hashSync(password, 8);
+  await sql`insert into users(id, username, email, password) values(${uuidv4()}, ${username}, ${email}, ${hash})`;
+
+  // 4. success response
+  res.status(200).json({ message: "Successfully registered" });
 };
 
 // Read ---------------------------------------------
 const getUser = async (req, res) => {
-  const result = await sql`select * from users`;
-  res.json(result);
+  const { username, email, password } = req.body;
+
+  // 1. check if username exist
+  const users = await sql`SELECT * FROM users WHERE username=${username}`;
+  if (users.length === 0) {
+    res.status(400).json({ message: "Username or password is not correct" });
+    return;
+  }
+
+  // 2. password check
+  const user = users[0];
+  if (!bcrypt.compareSync(password, user.password)) {
+    res.status(400).json({ message: "Username or password is not correct" });
+    return;
+  }
+
+  // 3. success response
+  res.status(200).json({ message: "Login Success" });
 };
 
 // Update ---------------------------------------------

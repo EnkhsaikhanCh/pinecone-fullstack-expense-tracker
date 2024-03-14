@@ -8,9 +8,8 @@ const {
 
 const usersRouter = express.Router();
 
-usersRouter.post("/create", createUser);
-usersRouter.get("/", getUser);
+usersRouter.post("/signUp", createUser);
+usersRouter.post("/login", getUser);
 usersRouter.put("/update/:id", updateUser);
-// usersRouter.delete("/delete/:id", deleteUser);
 
 module.exports = usersRouter;

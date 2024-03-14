@@ -3,13 +3,15 @@ import { useState } from "react";
 import axios from "axios";
 
 export default function Home() {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   function handleClick() {
     console.log({ email, password });
     axios
-      .post("http://localhost:3000/login", {
+      .post("http://localhost:3000/users/login", {
+        username,
         email,
         password,
       })
@@ -34,6 +36,19 @@ export default function Home() {
         <div className="card w-full rounded-md border bg-white">
           <div className="card-body px-[20px] py-4">
             <div className="flex flex-col gap-4">
+              {/* Username */}
+              <label className="form-control w-full max-w-xs">
+                <div className="label px-0 pt-0">
+                  <span className="label-text font-bold">Username</span>
+                </div>
+                <input
+                  type="text"
+                  placeholder=""
+                  className="input input-sm input-bordered w-full max-w-xs rounded-md bg-[#F5F5F5]"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </label>
               {/* Email */}
               <label className="form-control w-full max-w-xs">
                 <div className="label px-0 pt-0">

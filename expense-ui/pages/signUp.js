@@ -3,19 +3,19 @@ import axios from "axios";
 import { useState } from "react";
 
 export default function Home() {
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   function signUpUser() {
     axios
-      .post(`http://localhost:3000/users/create`, {
-        name: name,
+      .post(`http://localhost:3000/users/signUp`, {
+        username: username,
         email: email,
         password: password,
       })
       .then(() => {
-        setName("");
+        setUsername("");
         setEmail("");
         setPassword("");
       })
@@ -42,14 +42,14 @@ export default function Home() {
               {/* Name */}
               <label className="form-control w-full max-w-xs">
                 <div className="label px-0 pb-1 pt-0">
-                  <span className="label-text font-bold">Name</span>
+                  <span className="label-text font-bold">Username</span>
                 </div>
                 <input
                   type="text"
                   placeholder=""
                   className="input input-sm input-bordered w-full max-w-xs rounded-md bg-[#F5F5F5]"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                 />
               </label>
               {/* Email */}
