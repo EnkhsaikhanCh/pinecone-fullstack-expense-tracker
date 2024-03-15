@@ -6,9 +6,14 @@ export default function Home() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   function handleClick() {
-    console.log({ email, password });
+    if (!username || !email || !password) {
+      setError("All fields are required");
+      return;
+    }
+
     axios
       .post("http://localhost:3000/users/login", {
         username,
@@ -18,6 +23,18 @@ export default function Home() {
       .then(() => {
         localStorage.setItem("login", `${email}:${password}`);
         window.location = "/";
+      })
+      .catch((error) => {
+        console.error("Error occurred:", error);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message
+        ) {
+          setError(error.response.data.message);
+        } else {
+          setError("Oops... Please try again later.");
+        }
       });
   }
 
@@ -35,12 +52,10 @@ export default function Home() {
         </div>
         <div className="card w-full rounded-md border bg-white">
           <div className="card-body px-[20px] py-4">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
               {/* Username */}
-              <label className="form-control w-full max-w-xs">
-                <div className="label px-0 pt-0">
-                  <span className="label-text font-bold">Username</span>
-                </div>
+              <label className="form-control gap-1">
+                <span className="label-text font-bold">Username</span>
                 <input
                   type="text"
                   placeholder=""
@@ -50,10 +65,8 @@ export default function Home() {
                 />
               </label>
               {/* Email */}
-              <label className="form-control w-full max-w-xs">
-                <div className="label px-0 pt-0">
-                  <span className="label-text font-bold">Email</span>
-                </div>
+              <label className="form-control gap-1">
+                <span className="label-text font-bold">Email</span>
                 <input
                   type="text"
                   placeholder=""
@@ -63,8 +76,8 @@ export default function Home() {
                 />
               </label>
               {/* Password */}
-              <label className="form-control mb-[15px] w-full max-w-xs">
-                <div className="label px-0 pt-0">
+              <label className="form-control gap-1">
+                <div className="label p-0">
                   <span className="label-text font-bold">Password</span>
                   <button className="label-text-alt text-[#2F81F7]">
                     Forget password?
@@ -78,10 +91,14 @@ export default function Home() {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </label>
+              {/* Error message */}
+              {error && (
+                <p className="text-center text-sm text-red-500">{error}</p>
+              )}
             </div>
             {/* Login button */}
             <button
-              className="btn btn-neutral btn-sm rounded-md text-white"
+              className="btn btn-neutral btn-sm mt-2 rounded-md text-white"
               onClick={handleClick}
             >
               Log in
@@ -92,7 +109,7 @@ export default function Home() {
         <div className="card w-full rounded-md border bg-white">
           <div className="card-body py-[20px]">
             <span className="flex justify-center gap-2">
-              Don't have account?{" "}
+              Don't have account?
               <a href="http://localhost:3001/signUp">
                 <button className="text-[#2F81F7]">Sign up</button>
               </a>
