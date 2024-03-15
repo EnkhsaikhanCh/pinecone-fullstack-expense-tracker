@@ -79,7 +79,7 @@ export default function SignUp() {
           <div className="card-body px-[20px] py-4">
             <div className="flex flex-col gap-3">
               {/* Username */}
-              <label className="form-control">
+              <label className="form-control gap-1">
                 <span className="label-text font-bold">Username</span>
                 <input
                   type="text"
@@ -90,7 +90,7 @@ export default function SignUp() {
                 />
               </label>
               {/* Email */}
-              <label className="form-control">
+              <label className="form-control gap-1">
                 <span className="label-text font-bold">Email</span>
                 <input
                   type="email"
@@ -101,7 +101,7 @@ export default function SignUp() {
                 />
               </label>
               {/* Password */}
-              <label className="form-control">
+              <label className="form-control gap-1">
                 <span className="label-text font-bold">Password</span>
                 <input
                   type="password"
@@ -112,7 +112,7 @@ export default function SignUp() {
                 />
               </label>
               {/* Confirm Password */}
-              <label className="form-control">
+              <label className="form-control gap-1">
                 <span className="label-text font-bold">Confirm Password</span>
                 <input
                   type="password"
@@ -129,7 +129,7 @@ export default function SignUp() {
             </div>
             {/* Sign up button */}
             <button
-              className="btn btn-neutral btn-sm mt-4 rounded-md text-white"
+              className="btn btn-neutral btn-sm mt-2 rounded-md text-white"
               onClick={signUpUser}
             >
               Sign up
@@ -137,7 +137,7 @@ export default function SignUp() {
           </div>
         </div>
         {/* Sign up */}
-        <div className="card mt-4 w-full rounded-md border bg-white">
+        <div className="card w-full rounded-md border bg-white">
           <div className="card-body py-[20px]">
             <span className="flex justify-center gap-2">
               Already have an account?
