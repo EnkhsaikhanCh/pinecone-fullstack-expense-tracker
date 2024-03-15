@@ -11,19 +11,14 @@ export default function SignUp() {
   });
   const [error, setError] = useState("");
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const signUpUser = () => {
+  const validateForm = () => {
     const { username, email, password, rePassword } = formData;
-
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!username || !email || !password || !rePassword) {
       setError("All fields are required");
       return;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError("Please enter a valid email address");
       return;
@@ -38,24 +33,33 @@ export default function SignUp() {
       setError("Passwords do not match");
       return;
     }
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const signUpUser = () => {
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
 
     axios
       .post(`http://localhost:3000/users/signUp`, {
-        username,
-        email,
-        password,
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
       })
       .then((response) => {
         if (response.data && response.data.message) {
-          setError(response.data.message);
-        } else {
           setFormData({
             username: "",
             email: "",
             password: "",
             rePassword: "",
           });
-          setError("");
         }
       })
       .catch((error) => {
