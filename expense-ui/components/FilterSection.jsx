@@ -43,23 +43,37 @@ export function FilterSection({ loadTransactions }) {
         <AddRecordButton onComplete={loadTransactions} />
         <div className="mt-3 flex flex-col">
           <h1 className="font-bold">Category</h1>
-          {categories.map((category) => (
-            <p
-              key={category.id}
-              className="mb-1 ml-2 flex items-center justify-between text-center"
-            >
-              {category.name}
-              <button
-                className="btn btn-ghost btn-sm w-8 p-0"
-                onClick={() => deleteCategory(category.id)}
-              >
-                <PiTrashDuotone />
-              </button>
-            </p>
-          ))}
+          {categories.length > 0
+            ? categories.map((category) => (
+                <p
+                  key={category.id}
+                  className="mb-1 ml-2 flex items-center justify-between text-center"
+                >
+                  {category.name}
+                  <button
+                    className="btn btn-ghost btn-sm w-8 p-0"
+                    onClick={() => deleteCategory(category.id)}
+                  >
+                    <PiTrashDuotone />
+                  </button>
+                </p>
+              ))
+            : CategorySkeleton()}
         </div>
       </div>
       <AddCategoryButton onComplete={loadCategory} />
     </div>
+  );
+}
+
+function CategorySkeleton() {
+  return (
+    <>
+      <div className="flex flex-col gap-1">
+        <div className="skeleton h-[30px] w-full rounded-md"></div>
+        <div className="skeleton h-[30px] w-full rounded-md"></div>
+        <div className="skeleton h-[30px] w-full rounded-md"></div>
+      </div>
+    </>
   );
 }
