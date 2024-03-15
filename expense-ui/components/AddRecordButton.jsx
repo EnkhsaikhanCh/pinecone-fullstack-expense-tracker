@@ -1,4 +1,4 @@
-import axios from "axios";
+import useSWR from "swr";
 import { useState } from "react";
 import { CategorySelect } from "./CategorySelect";
 import { PayeeSelect } from "./PayeeSelect";
@@ -25,19 +25,27 @@ export function AddRecordButton({ onComplete }) {
   const [open, setOpen] = useState(false);
   const [displayAmount, setDisplayAmount] = useState("");
 
+  const { mutate } = useSWR(API_BASE_URL);
+
   function createTransaction() {
-    axios
-      .post(`${API_BASE_URL}/${CREATE_ENDPOINT}`, {
+    fetch(`${API_BASE_URL}/${CREATE_ENDPOINT}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
         category_id: category_id,
         amount: amount,
         date: dateTime,
-      })
+      }),
+    })
       .then(() => {
         closeModal();
         onComplete();
         setDisplayAmount("");
         setCategory_id("");
         setDateTime(getCurrentDateTime());
+        mutate();
       })
       .catch((error) => {
         console.error("Error creating transaction:", error);
