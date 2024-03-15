@@ -1,28 +1,67 @@
-import { LogoSVG } from "@/components/image/LogoSVG";
-import axios from "axios";
 import { useState } from "react";
+import axios from "axios";
+import { LogoSVG } from "@/components/image/LogoSVG";
 
-export default function Home() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export default function SignUp() {
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    rePassword: "",
+  });
+  const [error, setError] = useState("");
 
-  function signUpUser() {
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const signUpUser = () => {
+    const { username, email, password, rePassword } = formData;
+
+    if (!username || !email || !password || !rePassword) {
+      setError("All fields are required");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address");
+      return;
+    }
+
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters");
+      return;
+    }
+
+    if (password !== rePassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
     axios
       .post(`http://localhost:3000/users/signUp`, {
-        username: username,
-        email: email,
-        password: password,
+        username,
+        email,
+        password,
       })
-      .then(() => {
-        setUsername("");
-        setEmail("");
-        setPassword("");
+      .then((response) => {
+        if (response.data && response.data.message) {
+          setError(response.data.message);
+        } else {
+          setFormData({
+            username: "",
+            email: "",
+            password: "",
+            rePassword: "",
+          });
+          setError("");
+        }
       })
       .catch((error) => {
-        console.error("Error creating user:", error);
+        setError("Error creating user: " + error.message);
       });
-  }
+  };
 
   return (
     <main>
@@ -39,59 +78,58 @@ export default function Home() {
         <div className="card w-full rounded-md border bg-white">
           <div className="card-body px-[20px] py-4">
             <div className="flex flex-col gap-3">
-              {/* Name */}
-              <label className="form-control w-full max-w-xs">
-                <div className="label px-0 pb-1 pt-0">
-                  <span className="label-text font-bold">Username</span>
-                </div>
+              {/* Username */}
+              <label className="form-control">
+                <span className="label-text font-bold">Username</span>
                 <input
                   type="text"
-                  placeholder=""
-                  className="input input-sm input-bordered w-full max-w-xs rounded-md bg-[#F5F5F5]"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  name="username"
+                  className="input input-sm input-bordered rounded-md bg-[#F5F5F5]"
+                  value={formData.username}
+                  onChange={handleChange}
                 />
               </label>
               {/* Email */}
-              <label className="form-control w-full max-w-xs">
-                <div className="label px-0 pb-1 pt-0">
-                  <span className="label-text font-bold">Email</span>
-                </div>
+              <label className="form-control">
+                <span className="label-text font-bold">Email</span>
                 <input
-                  type="text"
-                  placeholder=""
-                  className="input input-sm input-bordered w-full max-w-xs rounded-md bg-[#F5F5F5]"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                  name="email"
+                  className="input input-sm input-bordered rounded-md bg-[#F5F5F5]"
+                  value={formData.email}
+                  onChange={handleChange}
                 />
               </label>
               {/* Password */}
-              <label className="form-control w-full max-w-xs">
-                <div className="label px-0 pb-1 pt-0">
-                  <span className="label-text font-bold">Password</span>
-                </div>
+              <label className="form-control">
+                <span className="label-text font-bold">Password</span>
                 <input
                   type="password"
-                  placeholder=""
-                  className="input input-sm input-bordered w-full max-w-xs rounded-md bg-[#F5F5F5]"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  name="password"
+                  className="input input-sm input-bordered rounded-md bg-[#F5F5F5]"
+                  value={formData.password}
+                  onChange={handleChange}
                 />
               </label>
-              <label className="form-control mb-[15px] w-full max-w-xs">
-                <div className="label px-0 pb-1 pt-0">
-                  <span className="label-text font-bold">Re-password</span>
-                </div>
+              {/* Confirm Password */}
+              <label className="form-control">
+                <span className="label-text font-bold">Confirm Password</span>
                 <input
                   type="password"
-                  placeholder=""
-                  className="input input-sm input-bordered w-full max-w-xs rounded-md bg-[#F5F5F5]"
+                  name="rePassword"
+                  className="input input-sm input-bordered rounded-md bg-[#F5F5F5]"
+                  value={formData.rePassword}
+                  onChange={handleChange}
                 />
               </label>
+              {/* Error message */}
+              {error && (
+                <p className="text-center text-sm text-red-500">{error}</p>
+              )}
             </div>
             {/* Sign up button */}
             <button
-              className="btn btn-neutral btn-sm rounded-md text-white"
+              className="btn btn-neutral btn-sm mt-4 rounded-md text-white"
               onClick={signUpUser}
             >
               Sign up
@@ -99,10 +137,10 @@ export default function Home() {
           </div>
         </div>
         {/* Sign up */}
-        <div className="card w-full rounded-md border bg-white">
+        <div className="card mt-4 w-full rounded-md border bg-white">
           <div className="card-body py-[20px]">
             <span className="flex justify-center gap-2">
-              Already have account?
+              Already have an account?
               <a href="http://localhost:3001/login">
                 <button className="text-[#2F81F7]">Log in</button>
               </a>
