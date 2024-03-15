@@ -55,12 +55,20 @@ const options = {
 
 const labels = ["March", "April", "May", "June", "July", "August", "September"];
 
-const expanse = [100, 123, 100, 123, 100, 123, 100];
 const income = [100, 80, 100, 123, 100, 123, 100];
+const expanse = [50, 20, 70, 30, 10, 60, 40];
 
 export const data = {
   labels,
   datasets: [
+    {
+      label: "Income",
+      data: income,
+      borderColor: "rgba(112, 231, 183)",
+      backgroundColor: "rgba(209, 250, 229)",
+      borderRadius: 3,
+      stack: "Stack 1",
+    },
     {
       label: "Expanse",
       data: expanse,
@@ -68,14 +76,6 @@ export const data = {
       backgroundColor: "rgba(255, 228, 230)",
       borderRadius: 3,
       stack: "Stack 0",
-    },
-    {
-      label: "Income",
-      data: income,
-      backgroundColor: "rgba(209, 250, 229)",
-      borderColor: "rgba(112, 231, 183)",
-      borderRadius: 3,
-      stack: "Stack 1",
     },
   ],
 };
