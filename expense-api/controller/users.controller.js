@@ -11,7 +11,7 @@ const createUser = async (req, res) => {
     const users =
       await sql`SELECT * FROM users WHERE username=${username} OR email=${email}`;
     if (users.length > 0) {
-      res.status(200).json({ message: "Already registered." });
+      res.status(200).json({ message: "Username or email already exists." });
       return;
     }
 
@@ -77,8 +77,21 @@ const updateUser = async (req, res) => {
   res.json(result);
 };
 
+// List Users ---------------------------------------------
+const listUsers = async (req, res) => {
+  try {
+    const users = await sql`SELECT * FROM users`;
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error listing users:", error);
+    res.status(500).json({ message: "An error occurred while listing users." });
+  }
+};
+
 module.exports = {
   createUser,
   getUser,
   updateUser,
+  listUsers,
 };
