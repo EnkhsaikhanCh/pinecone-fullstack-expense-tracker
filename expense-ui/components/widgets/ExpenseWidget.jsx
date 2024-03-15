@@ -26,11 +26,12 @@ export function ExpenseWidget() {
         </div>
         <div className="flex h-[120px] flex-col justify-between gap-4 px-8 pt-2">
           <div>
-            {totalAmount.map((totalAmount) => (
+            {totalAmount && (
               <span className="rounded-md border border-red-300 bg-rose-100 px-3 text-4xl font-semibold">
-                {totalAmount.sum}
+                {totalAmount.incomeSum}
               </span>
-            ))}
+            )}
+
             <p className="mt-1 text-lg text-gray-400">Your Expense Amount</p>
           </div>
           <div className="flex items-center gap-2">

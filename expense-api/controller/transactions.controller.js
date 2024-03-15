@@ -37,8 +37,14 @@ const deleteTransaction = async (req, res) => {
 
 // dashboard bar chart ------
 const getTotalAmount = async (req, res) => {
-  const result = await sql`SELECT SUM(amount) FROM transactions;`;
-  res.json(result);
+  const incomeSum =
+    await sql`SELECT SUM(amount) FROM transactions WHERE amount::numeric::float8 > 0;`;
+  const expenseSum =
+    await sql`SELECT SUM(amount) FROM transactions WHERE amount::numeric::float8 < 0;`;
+  res.json({
+    incomeSum: incomeSum[0].sum,
+    expenseSum: expenseSum[0].sum,
+  });
 };
 
 module.exports = {
