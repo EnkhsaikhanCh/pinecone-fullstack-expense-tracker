@@ -26,10 +26,6 @@ const options = {
     },
   },
   plugins: {
-    // title: {
-    //   display: true,
-    //     text: "Expenses tracker 2024",
-    // },
     labels: {
       display: false,
     },
