@@ -16,23 +16,25 @@ export default function SignUp() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!username || !email || !password || !rePassword) {
       setError("All fields are required");
-      return;
+      return false;
     }
 
     if (!emailRegex.test(email)) {
       setError("Please enter a valid email address");
-      return;
+      return false;
     }
 
     if (password.length < 8) {
       setError("Password must be at least 8 characters");
-      return;
+      return false;
     }
 
     if (password !== rePassword) {
       setError("Passwords do not match");
-      return;
+      return false;
     }
+
+    return true;
   };
 
   const handleChange = (e) => {
@@ -40,9 +42,8 @@ export default function SignUp() {
   };
 
   const signUpUser = () => {
-    const validationError = validateForm();
-    if (validationError) {
-      setError(validationError);
+    const isFormValid = validateForm();
+    if (!isFormValid) {
       return;
     }
 
