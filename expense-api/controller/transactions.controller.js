@@ -35,16 +35,37 @@ const deleteTransaction = async (req, res) => {
   res.json(result);
 };
 
-// dashboard bar chart ------
+// Expense & Income total amount ----------------------
 const getTotalAmount = async (req, res) => {
   const incomeSum =
-    await sql`SELECT SUM(amount) FROM transactions WHERE amount::numeric::float8 > 0;`;
+    await sql`SELECT SUM(amount::numeric::float8) AS sum FROM transactions WHERE amount::numeric::float8 > 0;`;
   const expenseSum =
-    await sql`SELECT SUM(amount) FROM transactions WHERE amount::numeric::float8 < 0;`;
+    await sql`SELECT SUM(amount::numeric::float8) AS sum FROM transactions WHERE amount::numeric::float8 < 0;`;
   res.json({
-    incomeSum: incomeSum[0].sum,
-    expenseSum: expenseSum[0].sum,
+    incomeSum: incomeSum[0].sum || 0,
+    expenseSum: expenseSum[0].sum || 0,
   });
+};
+
+// Calculate Balance ----------------------------------
+const getNetBalance = async (req, res) => {
+  try {
+    const result =
+      await sql`SELECT SUM(amount) AS net_balance FROM transactions;`;
+    const netBalance = result[0].net_balance;
+
+    res.status(200).json({
+      success: true,
+      netBalance: netBalance,
+    });
+  } catch (error) {
+    console.error("Failed to fetch net balance:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to calculate net balance",
+      error: error.message,
+    });
+  }
 };
 
 module.exports = {
@@ -53,4 +74,5 @@ module.exports = {
   updateTransaction,
   deleteTransaction,
   getTotalAmount,
+  getNetBalance,
 };
