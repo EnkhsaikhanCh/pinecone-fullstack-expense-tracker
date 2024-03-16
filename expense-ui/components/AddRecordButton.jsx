@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR, { mutate } from "swr"; // Ensure mutate is imported correctly
 import { useState } from "react";
 import { CategorySelect } from "./CategorySelect";
 import { PayeeSelect } from "./PayeeSelect";
@@ -24,10 +24,14 @@ export function AddRecordButton({ onComplete }) {
   const [dateTime, setDateTime] = useState(getCurrentDateTime());
   const [open, setOpen] = useState(false);
   const [displayAmount, setDisplayAmount] = useState("");
+  const [transactionType, setTransactionType] = useState("expense");
 
   const { mutate } = useSWR(API_BASE_URL);
 
   function createTransaction() {
+    const adjustedAmount =
+      transactionType === "expense" ? -Math.abs(amount) : Math.abs(amount);
+
     fetch(`${API_BASE_URL}/${CREATE_ENDPOINT}`, {
       method: "POST",
       headers: {
@@ -35,7 +39,7 @@ export function AddRecordButton({ onComplete }) {
       },
       body: JSON.stringify({
         category_id: category_id,
-        amount: amount,
+        amount: adjustedAmount,
         date: dateTime,
       }),
     })
@@ -45,7 +49,7 @@ export function AddRecordButton({ onComplete }) {
         setDisplayAmount("");
         setCategory_id("");
         setDateTime(getCurrentDateTime());
-        mutate();
+        mutate(API_BASE_URL);
       })
       .catch((error) => {
         console.error("Error creating transaction:", error);
@@ -95,10 +99,20 @@ export function AddRecordButton({ onComplete }) {
           <div className="flex flex-col justify-between md:flex-row">
             {/* Part 1 */}
             <div className="flex flex-col justify-between">
-              {/* Select  */}
+              {/* Select  expense or income */}
               <div className="mb-4 grid grid-cols-2 gap-1">
-                <button className="btn">Expense</button>
-                <button className="btn">Income</button>
+                <button
+                  className={`btn hover:border-red-300 hover:bg-rose-100 ${transactionType === "expense" ? "border border-red-300 bg-rose-100 px-3 font-semibold " : ""}`}
+                  onClick={() => setTransactionType("expense")}
+                >
+                  Expense
+                </button>
+                <button
+                  className={`btn hover:border-emerald-300 hover:bg-emerald-100 ${transactionType === "income" ? "border border-emerald-300 bg-emerald-100 px-3 font-semibold" : ""}`}
+                  onClick={() => setTransactionType("income")}
+                >
+                  Income
+                </button>
               </div>
               <div className="flex flex-col gap-2">
                 {/* Amount */}
