@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 import { LogoSVG } from "@/components/image/LogoSVG";
+import { BiSolidHide } from "react-icons/bi";
+import { RxEyeOpen } from "react-icons/rx";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -10,30 +12,37 @@ export default function SignUp() {
     rePassword: "",
   });
   const [error, setError] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const validateForm = () => {
     const { username, email, password, rePassword } = formData;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Validate required fields
     if (!username || !email || !password || !rePassword) {
       setError("All fields are required");
       return false;
     }
 
+    // Validate email format
     if (!emailRegex.test(email)) {
       setError("Please enter a valid email address");
       return false;
     }
 
+    // Validate password length
     if (password.length < 8) {
       setError("Password must be at least 8 characters");
       return false;
     }
 
+    // Validate password match
     if (password !== rePassword) {
       setError("Passwords do not match");
       return false;
     }
 
+    // If all validations pass
     return true;
   };
 
@@ -42,10 +51,13 @@ export default function SignUp() {
   };
 
   const signUpUser = () => {
-    const isFormValid = validateForm();
-    if (!isFormValid) {
+    const errorMessage = validateForm();
+    if (errorMessage) {
+      setError(errorMessage);
       return;
     }
+
+    setError("");
 
     axios
       .post(`http://localhost:3000/users/signUp`, {
@@ -53,18 +65,24 @@ export default function SignUp() {
         email: formData.email,
         password: formData.password,
       })
-      .then((response) => {
-        if (response.data && response.data.message) {
-          setFormData({
-            username: "",
-            email: "",
-            password: "",
-            rePassword: "",
-          });
-        }
+      .then(() => {
+        setFormData({
+          username: "",
+          email: "",
+          password: "",
+          rePassword: "",
+        });
+        setError("");
       })
       .catch((error) => {
-        setError("Error creating user: " + error.message);
+        let errorMessage = "Something went wrong. Please try again";
+        if (error.response && error.response.data) {
+          errorMessage =
+            error.response.data.error || error.response.data.message;
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+        setError(errorMessage);
       });
   };
 
@@ -106,26 +124,53 @@ export default function SignUp() {
                 />
               </label>
               {/* Password */}
+
               <label className="form-control gap-1">
                 <span className="label-text font-bold">Password</span>
-                <input
-                  type="password"
-                  name="password"
-                  className="input input-sm input-bordered rounded-md bg-[#F5F5F5]"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
+                <div className="relative w-full max-w-xs">
+                  <input
+                    type={passwordVisible ? "text" : "password"}
+                    name="password"
+                    className="input input-sm input-bordered w-full rounded-md bg-[#F5F5F5] pr-10"
+                    value={formData.password}
+                    onChange={handleChange}
+                  />
+                  <button
+                    onClick={() => setPasswordVisible(!passwordVisible)}
+                    className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-700"
+                    type="button"
+                  >
+                    {passwordVisible ? (
+                      <RxEyeOpen size={15} />
+                    ) : (
+                      <BiSolidHide size={15} />
+                    )}
+                  </button>
+                </div>
               </label>
               {/* Confirm Password */}
               <label className="form-control gap-1">
                 <span className="label-text font-bold">Confirm Password</span>
-                <input
-                  type="password"
-                  name="rePassword"
-                  className="input input-sm input-bordered rounded-md bg-[#F5F5F5]"
-                  value={formData.rePassword}
-                  onChange={handleChange}
-                />
+                <div className="relative w-full max-w-xs">
+                  <input
+                    type={passwordVisible ? "text" : "password"}
+                    name="rePassword"
+                    className="input input-sm input-bordered w-full rounded-md bg-[#F5F5F5] pr-10"
+                    value={formData.rePassword}
+                    onChange={handleChange}
+                  />
+                  <button
+                    onClick={() => setPasswordVisible(!passwordVisible)}
+                    className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-700"
+                    type="button"
+                  >
+                    {passwordVisible ? (
+                      <RxEyeOpen size={15} />
+                    ) : (
+                      <BiSolidHide size={15} />
+                    )}
+                  </button>
+                </div>
               </label>
               {/* Error message */}
               {error && (
