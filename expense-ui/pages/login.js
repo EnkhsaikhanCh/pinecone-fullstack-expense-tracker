@@ -1,12 +1,15 @@
 import { LogoSVG } from "@/components/image/LogoSVG";
 import { useState } from "react";
 import axios from "axios";
+import { BiSolidHide } from "react-icons/bi";
+import { RxEyeOpen } from "react-icons/rx";
 
 export default function Home() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   function handleClick() {
     if (!username || !email || !password) {
@@ -83,13 +86,25 @@ export default function Home() {
                     Forget password?
                   </button>
                 </div>
-                <input
-                  type="password"
-                  placeholder=""
-                  className="input input-sm input-bordered w-full max-w-xs rounded-md bg-[#F5F5F5]"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <div className="relative w-full max-w-xs">
+                  <input
+                    type={passwordVisible ? "text" : "password"}
+                    className="input input-sm input-bordered w-full rounded-md bg-[#F5F5F5] pr-10"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button
+                    onClick={() => setPasswordVisible(!passwordVisible)}
+                    className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-700"
+                    type="button"
+                  >
+                    {passwordVisible ? (
+                      <RxEyeOpen size={15} />
+                    ) : (
+                      <BiSolidHide size={15} />
+                    )}
+                  </button>
+                </div>
               </label>
               {/* Error message */}
               {error && (
