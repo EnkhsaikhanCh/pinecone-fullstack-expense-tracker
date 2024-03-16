@@ -11,16 +11,16 @@ const createUser = async (req, res) => {
     const users =
       await sql`SELECT * FROM users WHERE username=${username} OR email=${email}`;
     if (users.length > 0) {
-      res.status(200).json({ message: "Username or email already exists." });
-      return;
+      return res
+        .status(400)
+        .json({ message: "Username or email already exists." });
     }
 
     // 2. password validation
     if (password.length < 8) {
-      res
-        .status(200)
+      return res
+        .status(400)
         .json({ message: "Password must be at least 8 characters" });
-      return;
     }
 
     // 3. register user
