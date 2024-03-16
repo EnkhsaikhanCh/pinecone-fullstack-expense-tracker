@@ -4,7 +4,7 @@ import { DotSVG } from "../image/DotSVG";
 import { DownVectorSVG } from "../image/DownVectorSVG";
 
 export function ExpenseWidget() {
-  const [totalAmount, setTotalAmount] = useState([]);
+  const [totalAmount, setTotalAmount] = useState(null);
 
   async function getTotalAmount() {
     const response = await axios.get(
@@ -17,6 +17,17 @@ export function ExpenseWidget() {
     getTotalAmount();
   }, []);
 
+  function formatCurrency(value) {
+    if (value === null) return "$0.00";
+
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
+  }
+
   return (
     <div className="card h-[200px] w-96 bg-white shadow-sm">
       <div className="card-body flex justify-between  px-0 pb-5 pt-4">
@@ -26,9 +37,9 @@ export function ExpenseWidget() {
         </div>
         <div className="flex h-[120px] flex-col justify-between gap-4 px-8 pt-2">
           <div>
-            {totalAmount && (
+            {totalAmount !== null && (
               <span className="rounded-md border border-red-300 bg-rose-100 px-3 text-4xl font-semibold">
-                {totalAmount.incomeSum}
+                {formatCurrency(totalAmount.expenseSum)}
               </span>
             )}
 
