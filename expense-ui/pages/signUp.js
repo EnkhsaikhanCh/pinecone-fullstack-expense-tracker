@@ -11,79 +11,89 @@ export default function SignUp() {
     password: "",
     rePassword: "",
   });
-  const [error, setError] = useState("");
+  const [formErrors, setFormErrors] = useState({});
   const [passwordVisible, setPasswordVisible] = useState(false);
-
-  const validateForm = () => {
-    const { username, email, password, rePassword } = formData;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    // Validate required fields
-    if (!username || !email || !password || !rePassword) {
-      setError("All fields are required");
-      return false;
-    }
-
-    // Validate email format
-    if (!emailRegex.test(email)) {
-      setError("Please enter a valid email address");
-      return false;
-    }
-
-    // Validate password length
-    if (password.length < 8) {
-      setError("Password must be at least 8 characters");
-      return false;
-    }
-
-    // Validate password match
-    if (password !== rePassword) {
-      setError("Passwords do not match");
-      return false;
-    }
-
-    // If all validations pass
-    return true;
-  };
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: "",
+      global: "",
+    }));
+
+    setFormErrors((currentFormErrors) => {
+      const newErrors = { ...currentFormErrors, [name]: "" };
+
+      if (name === "username" && !value) {
+        newErrors.username = "Username is required";
+      } else if (name === "email") {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+          newErrors.email = "Please enter a valid email address";
+        }
+      } else if (name === "password") {
+        if (value.length < 8) {
+          newErrors.password = "Password must be at least 8 characters";
+        }
+      } else if (name === "rePassword") {
+        if (value !== formData.password) {
+          newErrors.rePassword = "Passwords do not match";
+        }
+      }
+
+      return newErrors;
+    });
   };
 
-  const signUpUser = () => {
-    const errorMessage = validateForm();
-    if (errorMessage) {
-      setError(errorMessage);
-      return;
-    }
+  const canSubmit = () => {
+    return (
+      Object.values(formErrors).every((val) => val === "") &&
+      Object.values(formData).every((val) => val)
+    );
+  };
 
-    setError("");
-
-    axios
-      .post(`http://localhost:3000/users/signUp`, {
-        username: formData.username,
-        email: formData.email,
-        password: formData.password,
-      })
-      .then(() => {
+  const signUpUser = async (e) => {
+    e.preventDefault();
+    if (canSubmit()) {
+      setIsLoading(true);
+      try {
+        await axios.post("http://localhost:3000/users/signUp", formData);
+        alert("Sign up successful!");
         setFormData({
           username: "",
           email: "",
           password: "",
           rePassword: "",
         });
-        setError("");
-      })
-      .catch((error) => {
+        setFormErrors({});
+      } catch (error) {
         let errorMessage = "Something went wrong. Please try again";
-        if (error.response && error.response.data) {
+
+        if (error.response && error.response.status === 400) {
           errorMessage =
-            error.response.data.error || error.response.data.message;
+            error.response.data.message || "Username or email already exists.";
         } else if (error.message) {
           errorMessage = error.message;
         }
-        setError(errorMessage);
+
+        setFormErrors({ ...formErrors, global: errorMessage });
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      setFormErrors({
+        ...formErrors,
+        global: "Please correct the errors before submitting.",
       });
+    }
   };
 
   return (
@@ -111,6 +121,9 @@ export default function SignUp() {
                   value={formData.username}
                   onChange={handleChange}
                 />
+                {formErrors.username && (
+                  <p className="text-sm text-red-500">{formErrors.username}</p>
+                )}
               </label>
               {/* Email */}
               <label className="form-control gap-1">
@@ -122,9 +135,11 @@ export default function SignUp() {
                   value={formData.email}
                   onChange={handleChange}
                 />
+                {formErrors.email && (
+                  <p className="text-sm text-red-500">{formErrors.email}</p>
+                )}
               </label>
               {/* Password */}
-
               <label className="form-control gap-1">
                 <span className="label-text font-bold">Password</span>
                 <div className="relative w-full max-w-xs">
@@ -147,6 +162,9 @@ export default function SignUp() {
                     )}
                   </button>
                 </div>
+                {formErrors.password && (
+                  <p className="text-sm text-red-500">{formErrors.password}</p>
+                )}
               </label>
               {/* Confirm Password */}
               <label className="form-control gap-1">
@@ -171,19 +189,24 @@ export default function SignUp() {
                     )}
                   </button>
                 </div>
+                {formErrors.rePassword && (
+                  <p className="text-sm text-red-500">
+                    {formErrors.rePassword}
+                  </p>
+                )}
               </label>
-              {/* Error message */}
-              {error && (
-                <p className="text-center text-sm text-red-500">{error}</p>
-              )}
             </div>
             {/* Sign up button */}
             <button
               className="btn btn-neutral btn-sm mt-2 rounded-md text-white"
               onClick={signUpUser}
+              disabled={isLoading || !canSubmit()}
             >
-              Sign up
+              {isLoading ? "Signing up..." : "Sign up"}
             </button>
+            {formErrors.global && (
+              <p className="text-center text-red-500">{formErrors.global}</p>
+            )}
           </div>
         </div>
         {/* Sign up */}
