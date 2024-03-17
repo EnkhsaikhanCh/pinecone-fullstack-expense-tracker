@@ -2,6 +2,11 @@ const { sql } = require("../config/database");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcryptjs");
 
+const handleError = (error, res) => {
+  console.log(error);
+  res.status(500).json({ meassage: "An internal error occurred." });
+};
+
 // Create ---------------------------------------------
 const createUser = async (req, res) => {
   const { username, email, password } = req.body;
@@ -30,10 +35,7 @@ const createUser = async (req, res) => {
     // 4. success response
     res.status(200).json({ message: "Successfully registered" });
   } catch (error) {
-    console.error("Error creating user:", error);
-    res
-      .status(500)
-      .json({ message: "An error occurred while registering the user." });
+    handleError(error, res);
   }
 };
 
@@ -60,21 +62,28 @@ const getUser = async (req, res) => {
     // 3. success response
     res.status(200).json({ message: "Login Success" });
   } catch (error) {
-    console.error("Error authenticating user:", error);
-    res
-      .status(500)
-      .json({ message: "An error occurred while authenticating the user." });
+    handleError(error, res);
   }
 };
 
 // Update ---------------------------------------------
 const updateUser = async (req, res) => {
   const { id } = req.params;
-  const { name, email, password, avatar_img } = req.body;
+  const { username, email, password, avatar_img } = req.body;
 
-  const result =
-    await sql`UPDATE tasks SET users = ${name}, ${email}, ${password}, ${avatar_img} WHERE id = ${id}`;
-  res.json(result);
+  try {
+    const userExists = await sql`SELECT * FROM users WHERE id=${id}`;
+    if (userExists.length === 0) {
+      return res.status(404).json({ message: "User not found." });
+    }
+    const hash = password
+      ? bcrypt.hashSync(password, 10)
+      : userExists[0].password;
+    await sql`SELECT users SET username=${username}, email=${email}, password=${hash} avatar_img=${avatar_img}, WHERE id=${id}`;
+    res.status(200).json({ message: "User updated successfully." });
+  } catch (error) {
+    handleError(error, res);
+  }
 };
 
 // List Users ---------------------------------------------
@@ -84,8 +93,7 @@ const listUsers = async (req, res) => {
 
     res.status(200).json(users);
   } catch (error) {
-    console.error("Error listing users:", error);
-    res.status(500).json({ message: "An error occurred while listing users." });
+    handleError(error, res);
   }
 };
 
