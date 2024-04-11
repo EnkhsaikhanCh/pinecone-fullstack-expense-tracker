@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import { BiSolidHide } from "react-icons/bi";
 import { RxEyeOpen } from "react-icons/rx";
+import { Mutator } from "./util";
 
 export default function Home() {
   const [username, setUsername] = useState("");
@@ -11,34 +12,43 @@ export default function Home() {
   const [error, setError] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  function handleClick() {
-    if (!username || !email || !password) {
-      setError("All fields are required");
-      return;
-    }
+  async function handleClick() {
+    const accessToken = await Mutator("users/login", {
+      username,
+      email,
+      password,
+    });
+    console.log({ accessToken });
+    localStorage.setItem("accessToken", accessToken);
+    window.location = "/";
 
-    axios
-      .post("http://localhost:3000/users/login", {
-        username,
-        email,
-        password,
-      })
-      .then(() => {
-        localStorage.setItem("login", `${email}:${password}`);
-        window.location = "/";
-      })
-      .catch((error) => {
-        console.error("Error occurred:", error);
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.message
-        ) {
-          setError(error.response.data.message);
-        } else {
-          setError("Oops... Please try again later.");
-        }
-      });
+    // if (!username || !email || !password) {
+    //   setError("All fields are required");
+    //   return;
+    // }
+
+    // axios
+    //   .post("http://localhost:3000/users/login", {
+    //     username,
+    //     email,
+    //     password,
+    //   })
+    //   .then(() => {
+    //     localStorage.setItem("login", `${email}:${password}`);
+    //     window.location = "/";
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error occurred:", error);
+    //     if (
+    //       error.response &&
+    //       error.response.data &&
+    //       error.response.data.message
+    //     ) {
+    //       setError(error.response.data.message);
+    //     } else {
+    //       setError("Oops... Please try again later.");
+    //     }
+    //   });
   }
 
   return (
@@ -71,7 +81,7 @@ export default function Home() {
               <label className="form-control gap-1">
                 <span className="label-text font-bold">Email</span>
                 <input
-                  type="text"
+                  type="email"
                   placeholder=""
                   className="input input-sm input-bordered w-full max-w-xs rounded-md bg-[#F5F5F5]"
                   value={email}

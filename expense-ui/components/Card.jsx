@@ -3,22 +3,14 @@ import useSWR, { mutate } from "swr"; // Ensure mutate is imported correctly
 import { GrHomeRounded } from "react-icons/gr";
 import { PiTrashDuotone } from "react-icons/pi";
 import dayjs from "dayjs";
+import { Fetcher } from "@/pages/util";
 
 const API_BASE_URL = `http://localhost:3000/transactions`;
 const DELETE_ENDPOINT = `delete`;
 
 export function Card() {
-  const { data: transactions, error } = useSWR(API_BASE_URL, fetcher);
+  const { data: transactions, error } = useSWR("transactions", Fetcher);
   const isLoading = !transactions && !error;
-
-  async function fetcher(url) {
-    try {
-      const response = await axios.get(url);
-      return response.data;
-    } catch (error) {
-      throw new Error("Failed to fetch transactions");
-    }
-  }
 
   function deleteTransaction(transaction_id) {
     if (window.confirm("Delete?")) {
