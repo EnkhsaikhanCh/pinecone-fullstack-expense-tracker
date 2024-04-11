@@ -1,5 +1,6 @@
 const { sql } = require("../config/database");
 const { v4: uuidv4 } = require("uuid");
+const jwt = require("jsonwebtoken");
 
 // Create ---------------------------------------------
 const createTransaction = async (req, res) => {
@@ -13,9 +14,23 @@ const createTransaction = async (req, res) => {
 
 // Read ---------------------------------------------
 const getTransaction = async (req, res) => {
-  const result =
-    await sql`SELECT transactions.id, amount, category_id, categories.name category_name, date FROM transactions LEFT JOIN categories on transactions.category_id = categories.id;`;
-  res.json(result);
+  const token = req.get("access-token");
+  console.log({ token });
+
+  if (!token) {
+    return res.sendStatus(403);
+  }
+
+  try {
+    var decoded = jwt.verify(token, "secret_token123");
+    console.log({ decoded });
+    const result =
+      await sql`SELECT transactions.id, amount, category_id, categories.name category_name, date FROM transactions LEFT JOIN categories on transactions.category_id = categories.id;`;
+    res.json(result);
+  } catch (err) {
+    console.log({ err });
+    return res.sendStatus(403);
+  }
 };
 
 // Update ---------------------------------------------
