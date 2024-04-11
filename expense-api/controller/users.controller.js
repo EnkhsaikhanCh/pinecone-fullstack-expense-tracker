@@ -97,9 +97,32 @@ const listUsers = async (req, res) => {
   }
 };
 
+// Check Username Availability ------------------------------
+const checkUsername = async (req, res) => {
+  const { username } = req.query; // Assume username is passed as a query parameter
+
+  try {
+    const result =
+      await sql`SELECT EXISTS(SELECT 1 FROM users WHERE username=${username}) as "exists"`;
+    const exist = result[0].exists; // Extracts the existence result
+    if (exist) {
+      res.json({
+        available: false,
+        message:
+          "This username is already taken. Please select another username.",
+      });
+    } else {
+      res.json({ available: true, message: "Username is available." });
+    }
+  } catch (error) {
+    handleError(error, res);
+  }
+};
+
 module.exports = {
   createUser,
   getUser,
   updateUser,
   listUsers,
+  checkUsername,
 };
