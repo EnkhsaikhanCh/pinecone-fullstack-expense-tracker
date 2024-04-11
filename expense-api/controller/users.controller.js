@@ -1,6 +1,7 @@
 const { sql } = require("../config/database");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const handleError = (error, res) => {
   console.log(error);
@@ -10,6 +11,7 @@ const handleError = (error, res) => {
 // Create ---------------------------------------------
 const createUser = async (req, res) => {
   const { username, email, password } = req.body;
+  console.log({ username, email, password });
 
   try {
     // 1. Check duplicate username
@@ -42,6 +44,8 @@ const createUser = async (req, res) => {
 // Read ---------------------------------------------
 const getUser = async (req, res) => {
   const { username, email, password } = req.body;
+  // console.log({ username, email, password });
+  const loggedIn = true;
 
   try {
     // 1. check if username exist
@@ -59,8 +63,12 @@ const getUser = async (req, res) => {
       return;
     }
 
-    // 3. success response
-    res.status(200).json({ message: "Login Success" });
+    if (loggedIn) {
+      const accessToken = jwt.sign({ email: email }, "secret_token123");
+      // 3. success response
+      // console.log({ accessToken });
+      res.json(accessToken);
+    }
   } catch (error) {
     handleError(error, res);
   }
