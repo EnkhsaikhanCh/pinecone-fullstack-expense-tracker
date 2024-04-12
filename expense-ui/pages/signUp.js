@@ -3,6 +3,7 @@ import axios from "axios";
 import { LogoSVG } from "@/components/image/LogoSVG";
 import { BiSolidHide } from "react-icons/bi";
 import { RxEyeOpen } from "react-icons/rx";
+import { Mutator } from "./util";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -65,7 +66,13 @@ export default function SignUp() {
     if (canSubmit()) {
       setIsLoading(true);
       try {
-        await axios.post("http://localhost:3000/users/signUp", formData);
+        await Mutator("users/signUp", {
+          username,
+          email,
+          password,
+        });
+
+        // await axios.post("http://localhost:3000/users/signUp", formData);
         alert("Sign up successful!");
         setFormData({
           username: "",
