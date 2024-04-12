@@ -2,6 +2,7 @@ const { sql } = require("../config/database");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const handleError = (error, res) => {
   console.log(error);
@@ -44,13 +45,12 @@ const createUser = async (req, res) => {
 // Read ---------------------------------------------
 const getUser = async (req, res) => {
   const { username, email, password } = req.body;
-  // console.log({ username, email, password });
-  const loggedIn = true;
 
   try {
     // 1. check if username exist
     const users =
       await sql`SELECT * FROM users WHERE username=${username} OR email=${email}`;
+
     if (users.length === 0) {
       res.status(400).json({ message: "Username or password is not correct" });
       return;
@@ -63,12 +63,11 @@ const getUser = async (req, res) => {
       return;
     }
 
-    if (loggedIn) {
-      const accessToken = jwt.sign({ email: email }, "secret_token123");
-      // 3. success response
-      // console.log({ accessToken });
-      res.json(accessToken);
-    }
+    const accessToken = jwt.sign({ email: email }, process.env.JWT_SECRET);
+    // 3. success response
+    // console.log({ accessToken });
+    // Success response with accessToken
+    res.json(accessToken);
   } catch (error) {
     handleError(error, res);
   }
