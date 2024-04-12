@@ -13,19 +13,38 @@ export default function Home() {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   async function handleClick() {
-    const accessToken = await Mutator("users/login", {
-      username,
-      email,
-      password,
-    });
-    console.log({ accessToken });
-    localStorage.setItem("accessToken", accessToken);
-    window.location = "/";
+    if (!username || !email || !password) {
+      setError("All fields are required");
+      return;
+    }
 
-    // if (!username || !email || !password) {
-    //   setError("All fields are required");
-    //   return;
-    // }
+    try {
+      const accessToken = await Mutator("users/login", {
+        username,
+        email,
+        password,
+      });
+
+      if (accessToken) {
+        localStorage.setItem("accessToken", accessToken);
+        window.location = "/";
+      } else {
+        setError(
+          "Failed to log in. Please check your credentials and try again.",
+        );
+      }
+    } catch (error) {
+      console.error("Error occurred:", error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        setError(error.response.data.message);
+      } else {
+        setError("Oops... Please try again later.");
+      }
+    }
 
     // axios
     //   .post("http://localhost:3000/users/login", {
