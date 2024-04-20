@@ -6,20 +6,34 @@ export function PasswordField({
   value,
   onChange,
   toggleVisibility,
+  showForgotPassword,
 }: {
   label: string;
   visible: boolean;
   value: string;
   onChange: (newValue: string) => void;
   toggleVisibility: () => void;
+  showForgotPassword?: boolean;
 }) {
+  const inputId = `password-input-${label.replace(/\s+/g, "-")}`;
+
   return (
-    <label htmlFor="" className="form-control gap-1">
-      <span className="label-text font-bold">{label}</span>
+    <label htmlFor={inputId} className="form-control gap-1">
+      <div className="label p-0">
+        <span className="label-text font-bold">{label}</span>
+        {showForgotPassword && (
+          <a href="/forgotPassword">
+            <button className="btn btn-ghost label-text-alt btn-xs rounded-[3px] border-none font-semibold text-[#2F81F7] hover:bg-gray-100">
+              Forget password?
+            </button>
+          </a>
+        )}
+      </div>
       <div className="relative w-full max-w-xs">
         <input
+          id={inputId}
           type={visible ? "text" : "password"}
-          className="input input-sm input-bordered w-full rounded-md bg-[#F5F5F5] pr-10"
+          className="input input-sm input-bordered w-full rounded-md bg-[#F5F5F5] pr-10 focus:border-blue-500 focus:outline-none focus:ring-1"
           value={value}
           onChange={(e) => onChange(e.target.value)}
           aria-label={label}
