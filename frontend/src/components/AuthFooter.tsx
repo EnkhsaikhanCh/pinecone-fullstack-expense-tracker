@@ -13,7 +13,7 @@ export function AuthFooter({
         <span className="flex items-center justify-center gap-3">
           {text}
           <a href={href}>
-            <button className="btn btn-sm border-none text-[#2F81F7] shadow-none hover:bg-gray-200">
+            <button className="btn btn-sm rounded-[5px] border-none bg-gray-100 text-[#2F81F7] shadow-none hover:bg-gray-200">
               {label}
             </button>
           </a>

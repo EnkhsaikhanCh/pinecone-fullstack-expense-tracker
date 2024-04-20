@@ -14,7 +14,7 @@ export function Field({
       <span className="label-text font-bold">{label}</span>
       <input
         type={type}
-        className="input input-sm input-bordered w-full max-w-xs rounded-md bg-[#F5F5F5]"
+        className="input input-sm input-bordered w-full max-w-xs rounded-md bg-[#F5F5F5] focus:border-blue-500 focus:outline-none focus:ring-1"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         aria-label={label}

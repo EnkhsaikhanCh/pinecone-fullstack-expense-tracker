@@ -7,7 +7,7 @@ export function AuthBtnSmall({
 }) {
   return (
     <button
-      className="btn btn-neutral btn-sm mt-2 rounded-md text-white"
+      className="btn btn-neutral btn-sm mt-2 rounded-[5px] text-white"
       onClick={onClick}
     >
       {label}
