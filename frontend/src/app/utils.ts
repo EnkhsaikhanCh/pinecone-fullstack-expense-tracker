@@ -1,8 +1,10 @@
 import axios from "axios";
+import { create } from "zustand";
+import { CategoryState, TransactionState } from "./interface";
 
 export async function Fetcher(path: string) {
   try {
-    const response = await axios.get(`http://localhost:3000/${path}`, {
+    const response = await axios.get(`http://localhost:4000/${path}`, {
       headers: {
         "access-token": localStorage.getItem("accessToken"),
       },
@@ -10,14 +12,14 @@ export async function Fetcher(path: string) {
     return response.data;
   } catch (error) {
     console.error("Failed to fetch data:", error);
-    throw error; // Rethrowing the error allows the calling function to handle it further if needed
+    throw error;
   }
 }
 
 export async function Mutator(path: string, postData: any) {
   try {
     const response = await axios.post(
-      `http://localhost:3000/${path}`,
+      `http://localhost:4000/${path}`,
       postData,
       {
         headers: {
@@ -31,3 +33,45 @@ export async function Mutator(path: string, postData: any) {
     throw error;
   }
 }
+
+const createStore = <T extends object>(init: (set: any) => T): (() => T) => {
+  return create<T>(init);
+};
+
+export const useTransactions = createStore<TransactionState>((set) => ({
+  transactions: null,
+  isLoading: false,
+  error: null,
+  loadTransactions: async () => {
+    set({ isLoading: false, error: null });
+    try {
+      const response = await Fetcher("transactions");
+      set({ transactions: response, isLoading: false });
+    } catch (error) {
+      console.error("Failed to load transactions:", error);
+      set({
+        isLoading: false,
+        error: "Failed to load transactions. Please try again later.",
+      });
+    }
+  },
+}));
+
+export const useCategories = createStore<CategoryState>((set) => ({
+  categories: null,
+  isLoading: false,
+  error: null,
+  loadCategories: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await Fetcher("categories");
+      set({ categories: response, isLoading: false });
+    } catch (error) {
+      console.error("Failed to load categories:", error);
+      set({
+        isLoading: false,
+        error: "Failed to load categories. Please try again later.",
+      });
+    }
+  },
+}));
