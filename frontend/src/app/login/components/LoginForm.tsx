@@ -6,14 +6,7 @@ import { Field } from "@/components/Field";
 import { PasswordField } from "@/components/PasswordField";
 import { Mutator } from "@/app/utils";
 import { AuthBtnSmall } from "@/components/AuthBtnSmall";
-
-interface ApiResponseError {
-  response?: {
-    data?: {
-      message?: string;
-    };
-  };
-}
+import { ApiResponseError } from "@/app/interface";
 
 export function LoginForm() {
   const [username, setUsername] = useState<string>("");
