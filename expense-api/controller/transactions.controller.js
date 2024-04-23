@@ -4,12 +4,16 @@ const jwt = require("jsonwebtoken");
 
 // Create ---------------------------------------------
 const createTransaction = async (req, res) => {
-  const { amount, category_id, date } = req.body;
+  try {
+    const { amount, category_id, date } = req.body;
 
-  const response =
-    await sql`INSERT INTO transactions(id, amount, category_id, date) values(${uuidv4()}, ${amount}, ${category_id}, ${date})`;
-
-  res.json(response);
+    const response =
+      await sql`INSERT INTO transactions(id, amount, category_id, date) values(${uuidv4()}, ${amount}, ${category_id}, ${date})`;
+    res.status(201).json({ success: true, data: response });
+  } catch (error) {
+    console.error("Failed to create transaction:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
 };
 
 // Read ---------------------------------------------
