@@ -1,38 +1,38 @@
 "use client";
 
-import { useEffect } from "react";
-import { useCategories } from "@/app/utils";
-import axios from "axios";
+import { useEffect, useState } from "react";
+import { Deleter, useCategories } from "@/app/utils";
 import { Toaster, toast } from "sonner";
 import { CategorySkeleton } from "./CategorySkeleton";
+import { CategoryDeleteModal } from "./CategoryDeleteModal";
 import { CategoryCard } from "./CategoryCard";
 
 export function CategoriesList() {
   const { categories, loadCategories, isLoading, error } = useCategories();
+  const [categoryId, setCategoryId] = useState<string | null>(null);
 
   useEffect(() => {
     loadCategories();
   }, []);
 
-  async function deleteCategory(id: string) {
-    if (window.confirm("Delete?")) {
-      try {
-        await axios.delete(`http://localhost:4000/categories/delete/${id}`);
-        toast.success("Category successfully deleted");
-        loadCategories();
-      } catch (error) {
-        console.error("Failed to delete category", error);
-        toast.error("Failed to delete category");
-      }
+  const handleConfirmDelete = async () => {
+    try {
+      await Deleter(`categories/delete/${categoryId}`);
+      toast.success("Category successfully deleted");
+      loadCategories();
+    } catch (error: any) {
+      console.error("Failed to delete category", error);
+      toast.error(
+        "Failed to delete category: " +
+          (error.response?.data.message || "Unknown error"),
+      );
+    } finally {
+      setCategoryId(null);
     }
-  }
+  };
 
   if (error) {
     return <div className="text-red-500">{error}</div>;
-  }
-
-  if (isLoading) {
-    return <CategorySkeleton />;
   }
 
   if (categories === null) {
@@ -50,15 +50,29 @@ export function CategoriesList() {
   return (
     <div className="mt-3 flex flex-col">
       <Toaster position="bottom-right" richColors />
-
       <h1 className="font-bold">Category</h1>
-      {categories.map((category) => (
-        <CategoryCard
-          key={category.id}
-          category={category}
-          onDelete={deleteCategory}
+
+      {isLoading ? (
+        <CategorySkeleton />
+      ) : (
+        <>
+          {categories.map((category) => (
+            <CategoryCard
+              key={category.id}
+              category={category}
+              setCategoryId={setCategoryId}
+            />
+          ))}
+        </>
+      )}
+
+      {categoryId && (
+        <CategoryDeleteModal
+          categoryId={categoryId}
+          onClose={() => setCategoryId(null)}
+          onConfirm={handleConfirmDelete}
         />
-      ))}
+      )}
     </div>
   );
 }
