@@ -11,9 +11,26 @@ const createCategory = async (req, res) => {
 };
 
 // Read ---------------------------------------------
-const getCategory = async (req, res) => {
+const getCategories = async (req, res) => {
   const result = await sql`SELECT * FROM categories`;
   res.json(result);
+};
+
+// Read one ---------------------------------------------
+const getCategoryById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await sql`SELECT * FROM categories WHERE id = ${id}`;
+    if (result.length === 0) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+    res.json(result[0]);
+  } catch (error) {
+    console.error("Failed to retrieve category:", error);
+    res.status(500).json({
+      message: "Failed to retrieve category due to an internal error",
+    });
+  }
 };
 
 // Delete ---------------------------------------------
@@ -25,6 +42,7 @@ const deleteCategory = async (req, res) => {
 
 module.exports = {
   createCategory,
-  getCategory,
+  getCategories,
   deleteCategory,
+  getCategoryById,
 };
