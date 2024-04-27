@@ -34,6 +34,20 @@ export async function Mutator(path: string, postData: any) {
   }
 }
 
+export async function Deleter(path: string) {
+  try {
+    const response = await axios.delete(`http://localhost:4000/${path}`, {
+      headers: {
+        "access-token": localStorage.getItem("accessToken"),
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Failed to delete data:", error);
+    throw error;
+  }
+}
+
 const createStore = <T extends object>(init: (set: any) => T): (() => T) => {
   return create<T>(init);
 };
