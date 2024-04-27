@@ -1,12 +1,11 @@
-import { Category } from "@/app/interface";
 import { PiTrashDuotone } from "react-icons/pi";
 
 export function CategoryCard({
   category,
-  onDelete,
+  setCategoryId,
 }: {
-  category: Category;
-  onDelete: (id: string) => void;
+  category: { id: string; name: string };
+  setCategoryId: (id: string) => void;
 }) {
   return (
     <p
@@ -17,7 +16,7 @@ export function CategoryCard({
       <button
         aria-label={`Delete category ${category.name}`}
         className="btn btn-ghost btn-sm w-8 p-0"
-        onClick={() => onDelete(category.id)}
+        onClick={() => setCategoryId(category.id)}
       >
         <PiTrashDuotone />
       </button>
