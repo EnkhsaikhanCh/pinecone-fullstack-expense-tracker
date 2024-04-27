@@ -27,8 +27,7 @@ export function AddTransaction() {
     "expense",
   );
   const [categories, setCategories] = useState<Category[]>([]);
-  const { transactions, loadTransactions, isLoading, error } =
-    useTransactions();
+  const { loadTransactions } = useTransactions();
 
   useEffect(() => {
     if (open) {
@@ -136,8 +135,8 @@ export function AddTransaction() {
         Add record
       </button>
 
-      <dialog id="my_modal_1" className={`modal ${open ? "modal-open" : ""}`}>
-        <div className="modal-box w-11/12 max-w-2xl overflow-visible">
+      <dialog className={`modal ${open ? "modal-open" : ""}`}>
+        <div className="modal-box w-11/12 max-w-2xl">
           <ModalHeader onClick={closeModal} />
           <div className="divider"></div>
 
