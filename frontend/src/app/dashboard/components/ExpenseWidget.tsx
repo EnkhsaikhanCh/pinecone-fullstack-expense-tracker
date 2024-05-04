@@ -51,17 +51,15 @@ export function ExpenseWidget() {
         </div>
         <div className="flex h-[120px] flex-col justify-between gap-4 px-8 pt-2">
           <div>
-            {isLoading ? (
-              <div className="flex h-[38px] w-[70px] items-center justify-center rounded-md border border-red-300 bg-red-100 px-3 font-semibold">
+            <div className="flex h-10 w-fit justify-center rounded-md border border-red-300 bg-red-100 px-3 text-3xl font-semibold">
+              {isLoading ? (
                 <span className="loading loading-spinner loading-sm"></span>
-              </div>
-            ) : error ? (
-              <span className="text-red-500">Error fetching data</span>
-            ) : totalAmount ? (
-              <span className="rounded-md border border-red-300 bg-rose-100 px-3 text-3xl font-semibold">
-                {formatCurrency(totalAmount.expenseSum)}
-              </span>
-            ) : null}
+              ) : error ? (
+                <span className="text-red-500">Error fetching data</span>
+              ) : totalAmount ? (
+                <span>{formatCurrency(totalAmount.expenseSum)}</span>
+              ) : null}
+            </div>
 
             <p className="mt-1 text-lg text-gray-400">Your Expense Amount</p>
           </div>

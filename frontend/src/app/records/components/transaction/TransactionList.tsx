@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useTransactions } from "@/app/utils";
+import { Deleter, useTransactions } from "@/app/utils";
 import axios from "axios";
 import { TransactionSkeleton } from "./TransactionSkeleton";
 import { TransactionCard } from "./TransactionCard";
@@ -18,9 +18,7 @@ export function TransactionList() {
   async function deleteTransaction(transaction_id: string) {
     if (window.confirm("Delete?")) {
       try {
-        await axios.delete(
-          `http://localhost:4000/transactions/delete/${transaction_id}`,
-        );
+        await Deleter(`transactions/delete/${transaction_id}`);
         toast.success("Transaction successfully deleted");
         loadTransactions();
       } catch (error) {

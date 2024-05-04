@@ -1,6 +1,5 @@
-import { Fetcher } from "@/app/utils";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import { Fetcher } from "@/app/utils";
 import { toast } from "sonner";
 
 interface CategoryDeleteModalProps {
@@ -26,15 +25,11 @@ export function CategoryDeleteModal({
   };
 
   useEffect(() => {
-    reset();
+    setName("");
     if (categoryId) {
       fetchCategory();
     }
   }, [categoryId]);
-
-  function reset() {
-    setName("");
-  }
 
   return (
     <dialog

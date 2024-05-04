@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Fetcher } from "@/app/utils";
 import { DotSVG } from "@/components/image/DotSVG";
 import { VectorSVG } from "@/components/image/VectorSVG";
@@ -14,7 +14,7 @@ export function IncomeWidget() {
   const [error, setError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  async function getTotalAmount() {
+  const getTotalAmount = useCallback(async () => {
     try {
       const response = await Fetcher("transactions/totalAmount");
       console.log(response);
@@ -25,14 +25,14 @@ export function IncomeWidget() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, []);
 
   useEffect(() => {
     getTotalAmount();
-  }, []);
+  }, [getTotalAmount]);
 
   function formatCurrency(value: number) {
-    if (value === null) return "$0.00";
+    if (isNaN(value)) return "$0.00";
 
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -51,18 +51,15 @@ export function IncomeWidget() {
         </div>
         <div className="flex h-[120px] flex-col justify-between gap-4 px-8 pt-2">
           <div>
-            {isLoading ? (
-              <div className="flex h-[38px] w-[70px] items-center justify-center rounded-md border border-emerald-300 bg-emerald-100 px-3 font-semibold">
+            <div className="flex h-10 w-fit justify-center rounded-md border border-emerald-300 bg-emerald-100 px-3 text-3xl font-semibold">
+              {isLoading ? (
                 <span className="loading loading-spinner loading-sm"></span>
-              </div>
-            ) : error ? (
-              <span className="text-red-500">Error fetching data</span>
-            ) : totalAmount ? (
-              <span className="rounded-md border border-emerald-300 bg-emerald-100 px-3 text-3xl font-semibold">
-                {formatCurrency(totalAmount.incomeSum)}
-              </span>
-            ) : null}
-
+              ) : error ? (
+                <span className="text-red-500">Error fetching data</span>
+              ) : totalAmount ? (
+                <span>{formatCurrency(totalAmount.incomeSum)}</span>
+              ) : null}
+            </div>
             <p className="mt-1 text-lg text-gray-400">Your Income Amount</p>
           </div>
           <div className="flex items-center gap-2">

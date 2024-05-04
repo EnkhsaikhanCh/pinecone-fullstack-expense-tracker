@@ -40,7 +40,9 @@ export function CashWidget() {
           <div>
             <p className="text-gray-400">Balance</p>
             {isLoading ? (
-              <span className="loading loading-spinner loading-sm"></span>
+              <div className="flex h-[32px] items-center">
+                <span className="loading loading-spinner loading-sm"></span>
+              </div>
             ) : error ? (
               <p className="text-red-500">Error fetching balance</p>
             ) : (
