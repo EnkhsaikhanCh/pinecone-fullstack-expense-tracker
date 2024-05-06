@@ -16,8 +16,35 @@ const createTransaction = async (req, res) => {
   }
 };
 
-// Read ---------------------------------------------
-const getTransaction = async (req, res) => {
+// Read one -----------------------------------------
+const getTransactionById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const [result] = await sql`
+      SELECT 
+        transactions.id, 
+        amount, 
+        category_id, 
+        categories.name AS category_name, 
+        date 
+      FROM transactions 
+      LEFT JOIN categories ON transactions.category_id = categories.id 
+      WHERE transactions.id = ${id};`;
+
+    if (!result) {
+      return res.status(404).json({ message: "Transaction not found" });
+    }
+
+    res.json(result);
+  } catch (err) {
+    console.log({ err });
+    return res.sendStatus(403);
+  }
+};
+
+// Read all -----------------------------------------
+const getTransactions = async (req, res) => {
   try {
     const result =
       await sql`SELECT transactions.id, amount, category_id, categories.name category_name, date FROM transactions LEFT JOIN categories on transactions.category_id = categories.id;`;
@@ -80,7 +107,8 @@ const getNetBalance = async (req, res) => {
 
 module.exports = {
   createTransaction,
-  getTransaction,
+  getTransactionById,
+  getTransactions,
   updateTransaction,
   deleteTransaction,
   getTotalAmount,

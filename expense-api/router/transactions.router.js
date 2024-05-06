@@ -2,7 +2,8 @@ const express = require("express");
 
 const {
   createTransaction,
-  getTransaction,
+  getTransactionById,
+  getTransactions,
   updateTransaction,
   deleteTransaction,
   getTotalAmount,
@@ -12,10 +13,11 @@ const {
 const transactionsRouter = express.Router();
 
 transactionsRouter.post("/create", createTransaction);
-transactionsRouter.get("/", getTransaction);
-transactionsRouter.put("/update/:id", updateTransaction);
-transactionsRouter.delete("/delete/:id", deleteTransaction);
+transactionsRouter.get("/", getTransactions);
 transactionsRouter.get("/totalAmount", getTotalAmount);
 transactionsRouter.get("/balance", getNetBalance);
+transactionsRouter.get("/:id", getTransactionById);
+transactionsRouter.put("/:id", updateTransaction);
+transactionsRouter.delete("/:id", deleteTransaction);
 
 module.exports = transactionsRouter;
