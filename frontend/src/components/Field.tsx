@@ -10,8 +10,8 @@ export const Field = forwardRef<
   }
 >(({ label, type, value, onChange }, ref) => {
   return (
-    <label className="form-control gap-1">
-      <span className="label-text font-bold">{label}</span>
+    <div className="form-control gap-1">
+      <label className="label-text font-bold">{label}</label>
       <input
         ref={ref}
         type={type}
@@ -20,6 +20,6 @@ export const Field = forwardRef<
         onChange={(e) => onChange(e.target.value)}
         aria-label={label}
       />
-    </label>
+    </div>
   );
 });

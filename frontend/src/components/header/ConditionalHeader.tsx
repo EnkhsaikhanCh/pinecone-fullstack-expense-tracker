@@ -1,13 +1,13 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Header } from "./header";
+import { Header } from "./Header";
 
 const excludePaths = ["/login", "/signUp", "/forgotPassword"];
 
 export function ConditionalHeader() {
   const pathname = usePathname();
-  const shouldShowHeader = !excludePaths.includes(pathname);
+  const showHeader = !excludePaths.includes(pathname);
 
-  return shouldShowHeader ? <Header /> : null;
+  return showHeader ? <Header /> : null;
 }

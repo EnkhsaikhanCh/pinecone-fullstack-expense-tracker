@@ -16,12 +16,10 @@ export const PasswordField = forwardRef<
     { label, visible, value, onChange, toggleVisibility, showForgotPassword },
     ref,
   ) => {
-    const inputId = `password-input-${label.replace(/\s+/g, "-")}`;
-
     return (
-      <label htmlFor={inputId} className="form-control gap-1">
+      <div className="form-control gap-1">
         <div className="label p-0">
-          <span className="label-text font-bold">{label}</span>
+          <label className="label-text font-bold">{label}</label>
           {showForgotPassword && (
             <a href="/forgotPassword">
               <button className="btn btn-ghost label-text-alt btn-xs rounded-[3px] border-none font-semibold text-[#2F81F7] hover:bg-gray-100">
@@ -33,7 +31,6 @@ export const PasswordField = forwardRef<
         <div className="relative w-full max-w-xs">
           <input
             ref={ref}
-            id={inputId}
             type={visible ? "text" : "password"}
             className="input input-sm input-bordered w-full rounded-md bg-[#F5F5F5] pr-10 focus:border-blue-500 focus:outline-none focus:ring-1"
             value={value}
@@ -49,7 +46,7 @@ export const PasswordField = forwardRef<
             {visible ? <BiSolidHide size={15} /> : <BiSolidShow size={15} />}
           </button>
         </div>
-      </label>
+      </div>
     );
   },
 );
