@@ -17,7 +17,7 @@ export function CategoriesList() {
 
   const handleConfirmDelete = async () => {
     try {
-      await Deleter(`categories/delete/${categoryId}`);
+      await Deleter(`categories/${categoryId}`);
       toast.success("Category successfully deleted");
       loadCategories();
     } catch (error: any) {
