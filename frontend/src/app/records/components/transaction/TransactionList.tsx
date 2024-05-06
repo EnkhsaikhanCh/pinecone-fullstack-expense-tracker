@@ -1,38 +1,40 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Deleter, useTransactions } from "@/app/utils";
 import axios from "axios";
 import { TransactionSkeleton } from "./TransactionSkeleton";
 import { TransactionCard } from "./TransactionCard";
 import { Toaster, toast } from "sonner";
+import { TransactionDeleteModal } from "./TransactionDeleteModal";
 
 export function TransactionList() {
   const { transactions, loadTransactions, isLoading, error } =
     useTransactions();
+  const [transactionId, setTransactionId] = useState<string | null>(null);
 
   useEffect(() => {
     loadTransactions();
   }, []);
 
-  async function deleteTransaction(transaction_id: string) {
-    if (window.confirm("Delete?")) {
-      try {
-        await Deleter(`transactions/delete/${transaction_id}`);
-        toast.success("Transaction successfully deleted");
-        loadTransactions();
-      } catch (error) {
-        console.error("Failed to delete transaction", error);
-      }
+  const handleConfirmDelete = async () => {
+    try {
+      await Deleter(`transactions/${transactionId}`);
+      toast.success("Transaction successfully delete");
+      loadTransactions();
+    } catch (error: any) {
+      console.error("Failed to delete transaction", error);
+      toast.error(
+        "Failed to delete category: " +
+          (error.response?.data.message || "Unknown error"),
+      );
+    } finally {
+      setTransactionId(null);
     }
-  }
+  };
 
   if (error) {
     return <div>Error loading transactions.</div>;
-  }
-
-  if (isLoading) {
-    return <TransactionSkeleton />;
   }
 
   if (transactions === null) {
@@ -53,13 +55,27 @@ export function TransactionList() {
         <Toaster position="bottom-right" richColors />
 
         <div className="card flex w-full gap-2 ">
-          {transactions.map((transaction) => (
-            <TransactionCard
-              key={transaction.id}
-              transaction={transaction}
-              onDelete={deleteTransaction}
+          {isLoading ? (
+            <TransactionSkeleton />
+          ) : (
+            <>
+              {transactions.map((transaction) => (
+                <TransactionCard
+                  key={transaction.id}
+                  transaction={transaction}
+                  setTransactionId={setTransactionId}
+                />
+              ))}
+            </>
+          )}
+
+          {transactionId && (
+            <TransactionDeleteModal
+              transactionId={transactionId}
+              onClose={() => setTransactionId(null)}
+              onConfirm={handleConfirmDelete}
             />
-          ))}
+          )}
         </div>
       </div>
     </>
