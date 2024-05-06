@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/header/header";
+import { ConditionalHeader } from "@/components/header/ConditionalHeader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="light" className="bg-[#F5F5F5]">
       <body className={inter.className}>
-        <Header />
+        <ConditionalHeader />
         {children}
       </body>
     </html>
