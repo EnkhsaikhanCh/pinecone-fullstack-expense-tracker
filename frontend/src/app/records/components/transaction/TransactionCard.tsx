@@ -5,10 +5,10 @@ import { PiTrashDuotone } from "react-icons/pi";
 
 export function TransactionCard({
   transaction,
-  onDelete,
+  setTransactionId,
 }: {
   transaction: TransactionType;
-  onDelete: (id: string) => void;
+  setTransactionId: (id: string) => void;
 }) {
   function parseAmount(amountString: string): number {
     const numericValue = Number(amountString.replace(/[^0-9.-]+/g, ""));
@@ -43,9 +43,9 @@ export function TransactionCard({
           {transaction.amount}
         </span>
         <button
+          aria-label={`Delete transaction ${transaction.amount}`}
           className="btn h-[48px] w-[48px] px-[10px]"
-          onClick={() => onDelete(transaction.id)}
-          aria-label={`Delete transaction with ID ${transaction.id}`}
+          onClick={() => setTransactionId(transaction.id)}
         >
           <PiTrashDuotone className="h-[20px] w-[20px]" />
         </button>
