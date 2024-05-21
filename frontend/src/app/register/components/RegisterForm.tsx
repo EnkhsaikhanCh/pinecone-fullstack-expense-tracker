@@ -17,7 +17,7 @@ interface ApiResponseError {
   };
 }
 
-export function SignUpForm() {
+export function RegisterForm() {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");

@@ -274,7 +274,11 @@ export default function Home() {
         </div>
       </div>
       {step === "EMAIL" && (
-        <AuthFooter label="Sign up" href="/signUp" text="Don't have account?" />
+        <AuthFooter
+          label="Sign up"
+          href="/register"
+          text="Don't have account?"
+        />
       )}
     </main>
   );
