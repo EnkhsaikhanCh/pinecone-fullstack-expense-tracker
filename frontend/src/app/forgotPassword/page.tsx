@@ -23,8 +23,8 @@ export default function Home() {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
 
   const otpRef = useRef<(HTMLInputElement | null)[]>(Array(6).fill(""));
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
+  const emailRef = useRef<HTMLInputElement | null>(null);
+  const passwordRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     gsap.fromTo(
@@ -139,7 +139,17 @@ export default function Home() {
         setStep("PASSWORD");
         return "Verified successfully";
       },
-      error: "Failed, Please try again.",
+      error: (error) => {
+        toast.error(error.message || "Failed, Please try again.");
+        gsap.to(otpRef.current, {
+          scale: 1,
+          opacity: 1,
+          stagger: 0.1,
+          duration: 0.3,
+          ease: "power2.out",
+        });
+        return error.message;
+      },
     });
   }
 
