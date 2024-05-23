@@ -1,5 +1,4 @@
 import type { Request, Response } from "express";
-import bcrypt from "bcrypt";
 import { UsersModel } from "../models/usersModel";
 import { validationResult } from "express-validator";
 
@@ -17,12 +16,18 @@ export async function createUser(
   console.log("Request body:", req.body); // Debug log
 
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const existingUser = await UsersModel.findOne({
+      $or: [{ username }, { email }],
+    });
+
+    if (existingUser) {
+      return res.status(409).json({ message: "User already exists." });
+    }
 
     const user = await UsersModel.create({
       username,
       email,
-      password: hashedPassword,
+      password,
     });
 
     const userResponse = {
@@ -37,10 +42,8 @@ export async function createUser(
     return res.json(userResponse);
   } catch (error: any) {
     console.error("Error creating user:", error); // Debug log
-    if (error.code === 11000) {
-      res.status(409).send("User already exists.");
-    } else {
-      res.status(500).send("Failed to create user.");
-    }
+    return res
+      .status(500)
+      .json({ message: "Failed to create user.", error: error.message });
   }
 }
