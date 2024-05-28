@@ -1,6 +1,16 @@
+import { useAuth } from "@/context/AuthContext";
 import { LogoSVG } from "../image/LogoSVG";
+import { useRouter } from "next/navigation";
 
 export function Header() {
+  const { logout } = useAuth();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout();
+    router.push("/login");
+  };
+
   return (
     <div className="bg-white">
       <div className="container mx-auto">
@@ -41,7 +51,7 @@ export function Header() {
                 <a>Settings</a>
               </li>
               <li>
-                <a>Logout</a>
+                <a onClick={handleLogout}>Logout</a>
               </li>
             </ul>
           </div>
