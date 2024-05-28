@@ -140,7 +140,6 @@ export default function Home() {
         return "Verified successfully";
       },
       error: (error) => {
-        toast.error(error.message || "Failed, Please try again.");
         gsap.to(otpRef.current, {
           scale: 1,
           opacity: 1,
