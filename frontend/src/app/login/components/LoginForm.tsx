@@ -7,8 +7,10 @@ import { PasswordField } from "@/components/PasswordField";
 import { Mutator } from "@/app/utils";
 import { AuthBtnSmall } from "@/components/AuthBtnSmall";
 import { ApiResponseError } from "@/app/interface";
+import { useAuth } from "@/context/AuthContext";
 
 export function LoginForm() {
+  const { login } = useAuth();
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -35,11 +37,8 @@ export function LoginForm() {
 
       toast.promise(loginPromise, {
         loading: "Logging in...",
-        success: (accessToken) => {
-          localStorage.setItem("accessToken", accessToken);
-          setTimeout(() => {
-            window.location.href = "/";
-          }, 1000);
+        success: (accessToken: string) => {
+          login(accessToken);
           return "Logged in successfully!";
         },
         error: (error: ApiResponseError) => {
@@ -82,10 +81,10 @@ export function LoginForm() {
             toggleVisibility={togglePasswordVisibility}
             showForgotPassword={true}
           />
-        </div>
 
-        {/* Login button */}
-        <AuthBtnSmall label="Log in" onClick={LoginSubmit} />
+          {/* Login button */}
+          <AuthBtnSmall label="Log in" onClick={LoginSubmit} />
+        </div>
       </div>
     </div>
   );
