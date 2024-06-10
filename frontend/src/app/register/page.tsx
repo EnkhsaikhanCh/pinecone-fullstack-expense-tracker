@@ -7,7 +7,6 @@ import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { PageLoading } from "@/components/PageLoading";
-import ProtectedRoute from "@/hoc/ProtectedRoute";
 
 export default function Register() {
   const { authStatus } = useAuthStore();
@@ -24,16 +23,14 @@ export default function Register() {
   }
 
   return (
-    <ProtectedRoute>
-      <main className="container mx-auto mt-10 flex w-[342px] flex-col items-center gap-3 px-4">
-        <AuthHeader label="Create Geld account" />
-        <RegisterForm />
-        <AuthFooter
-          label="Log in"
-          href="/login"
-          text="Already have an account?"
-        />
-      </main>
-    </ProtectedRoute>
+    <main className="container mx-auto mt-10 flex w-[342px] flex-col items-center gap-3 px-4">
+      <AuthHeader label="Create Geld account" />
+      <RegisterForm />
+      <AuthFooter
+        label="Log in"
+        href="/login"
+        text="Already have an account?"
+      />
+    </main>
   );
 }
